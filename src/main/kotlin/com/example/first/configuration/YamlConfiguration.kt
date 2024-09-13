@@ -7,11 +7,8 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties
 class YamlConfiguration {
     val name: String? = null
-    val environment: String? = null
-    val enabled = false
     val url: String? = null
     val driverClassName: String? = null
     val username: String? = null
     val password: String? = null
-    val servers: List<String> = ArrayList()
 }

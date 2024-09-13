@@ -1,32 +1,7 @@
 spring:
-  config:
-    activate:
-      on-profile: test
-    datasource:
-      url: jdbc:postgresql://localhost:5432/postgres
-      driver_class_name: org.postgresql.Driver
-      username: postgres
-      password: postgres
-name: test-YAML
-environment: testing
-enabled: false
-servers:
-  - www.abc.test.com
-  - www.xyz.test.com
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
 
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-    datasource:
-      url: jdbc:postgresql://localhost:5432/postgres
-      driver_class_name: org.postgresql.Driver
-      username: postgres
-      password: postgres
-name: prod-YAML
-environment: production
-enabled: true
-servers:
-  - www.abc.com
-  - www.xyz.com
