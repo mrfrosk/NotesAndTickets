@@ -1,10 +1,8 @@
 package com.example.first
 
-import com.example.first.Services.utils.Hashing
-import com.example.first.database.tables.UsersTable
+import YamlConfiguration
 import org.jetbrains.exposed.spring.autoconfigure.ExposedAutoConfiguration
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
@@ -16,6 +14,8 @@ import org.springframework.boot.runApplication
 	exclude = [DataSourceTransactionManagerAutoConfiguration::class]
 )
 class FirstApplication
+	@Autowired
+	lateinit var config: YamlConfiguration
 
 fun main(args: Array<String>) {
 	runApplication<FirstApplication>(*args)

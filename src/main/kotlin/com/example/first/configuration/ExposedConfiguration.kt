@@ -1,4 +1,4 @@
-package com.example.first.database.confguration
+package com.example.first.configuration
 import org.jetbrains.exposed.spring.autoconfigure.ExposedAutoConfiguration
 import org.jetbrains.exposed.sql.DatabaseConfig
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration

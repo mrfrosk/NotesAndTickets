@@ -1,6 +1,7 @@
-package com.example.first.database.confguration
+package com.example.first.configuration
 
 
+import com.example.first.configuration.Config
 import com.example.first.database.tables.NotesTable
 import com.example.first.database.tables.UsersTable
 import org.jetbrains.exposed.sql.SchemaUtils
