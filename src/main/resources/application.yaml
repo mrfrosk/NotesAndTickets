@@ -7,4 +7,3 @@ spring:
   security:
     user:
       password: "123"
-
