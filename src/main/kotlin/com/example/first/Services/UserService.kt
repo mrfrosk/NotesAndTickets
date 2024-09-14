@@ -57,11 +57,6 @@ class UserService {
         user.password = Hashing.toSha256(userFullDto.password)
     }
 
-    fun authUser(email: String, password: String): Boolean {
-        val user = transaction { getUser(email).toFullDto() }
-        return (user.email == email) && (user.password == Hashing.toSha256(password))
-    }
-
     private fun userCondition(
         email: String? = null,
         name: String? = null,

@@ -1,7 +1,6 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.UserService
-import com.example.first.database.dto.AuthDto
 import com.example.first.database.dto.UserFullDto
 import com.example.first.database.dto.UserInfoDto
 import com.example.first.database.entities.User
@@ -35,12 +34,6 @@ class UserController {
     @GetMapping
     fun getUsers(): List<UserInfoDto> {
         return userService.getUsers()
-    }
-
-    @PostMapping("login")
-    fun authUser(@RequestBody authBody: String): Boolean {
-        val userInfo = Json.decodeFromString<AuthDto>(authBody)
-        return userService.authUser(userInfo.email, userInfo.password)
     }
 
 }
