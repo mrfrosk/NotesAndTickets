@@ -34,7 +34,7 @@ class UserService {
         }
     }
 
-    fun getUsers(): List<UserInfoDto>{
+    fun getUsers(): List<UserInfoDto> {
         return transaction {
             User.all().map { it.toInfoDto() }
         }
@@ -46,6 +46,14 @@ class UserService {
         }.firstOrNull()
         require(user != null) { "Пользователя с электронной почтой $email не существует " }
         return user
+    }
+
+    fun isExistsByEmail(email: String): Boolean {
+        return transaction {
+            User.find {
+                UsersTable.email eq email
+            }.firstOrNull()
+        } != null
     }
 
     fun updateUser(email: String, userFullDto: UserFullDto) {
