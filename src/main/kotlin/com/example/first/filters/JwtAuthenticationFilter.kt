@@ -38,8 +38,9 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
 
         if (userService.isExistsByEmail(email)) {
             updateContext(email, request)
+            filterChain.doFilter(request, response)
         }
-        filterChain.doFilter(request, response)
+
     }
 
     fun String?.doesNotContainBearerToken() =
@@ -49,9 +50,11 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         this.substringAfter("Bearer ")
 
     fun updateContext(email: String, request: HttpServletRequest) {
-        val authToken = UsernamePasswordAuthenticationToken(email, null)
+        val authToken = UsernamePasswordAuthenticationToken(email, null, null)
         authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+        println(authToken)
         SecurityContextHolder.getContext().authentication = authToken
+        println(SecurityContextHolder.getContext().authentication)
     }
 
 }

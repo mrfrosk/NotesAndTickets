@@ -30,10 +30,8 @@ class SecurityConfiguration{
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/login")
                     .permitAll()
-                    .requestMatchers("/api/user**")
-                    .hasRole("ADMIN")
-                    .anyRequest()
-                    .fullyAuthenticated()
+                    .requestMatchers("/notes/**")
+                    .authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

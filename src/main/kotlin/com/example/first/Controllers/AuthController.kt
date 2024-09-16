@@ -27,9 +27,6 @@ class AuthController {
         val isAuth = authService.authUser(userInfo)
         val responseHeader = HttpHeaders()
         val token = jwtService.generateAccessToken(userInfo.email)
-        if (isAuth){
-            responseHeader.add("Bearer ", token)
-        }
-        return ResponseEntity.ok().headers(responseHeader).body(null)
+        return ResponseEntity.ok().headers(responseHeader).body(token)
     }
 }
