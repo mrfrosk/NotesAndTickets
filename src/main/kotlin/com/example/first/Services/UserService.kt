@@ -34,7 +34,7 @@ class UserService {
         }
     }
 
-    fun getUsers(): List<UserInfoDto>{
+    fun getUsers(): List<UserInfoDto> {
         return transaction {
             User.all().map { it.toInfoDto() }
         }
@@ -48,6 +48,14 @@ class UserService {
         return user
     }
 
+    fun isExistsByEmail(email: String): Boolean {
+        return transaction {
+            User.find {
+                UsersTable.email eq email
+            }.firstOrNull()
+        } != null
+    }
+
     fun updateUser(email: String, userFullDto: UserFullDto) {
         val user = getUser(email)
         user.email = userFullDto.email
@@ -55,11 +63,6 @@ class UserService {
         user.surname = userFullDto.surname
         user.patronymic = userFullDto.patronymic
         user.password = Hashing.toSha256(userFullDto.password)
-    }
-
-    fun authUser(email: String, password: String): Boolean {
-        val user = transaction { getUser(email).toFullDto() }
-        return (user.email == email) && (user.password == Hashing.toSha256(password))
     }
 
     private fun userCondition(

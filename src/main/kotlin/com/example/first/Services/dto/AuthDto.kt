@@ -1,4 +1,4 @@
-package com.example.first.database.dto
+package com.example.first.Services.dto
 
 import kotlinx.serialization.Serializable
 
