@@ -25,8 +25,6 @@ class JwtService {
     @Value("\${jwt.refresh-expired}")
     private lateinit var refreshExpired: String
 
-    private val key = Keys.hmacShaKeyFor(secret.toByteArray())
-
     private fun generate(
         email: String,
         expirationDate: Date,
@@ -39,7 +37,7 @@ class JwtService {
             .expiration(expirationDate)
             .add(additionalClaims)
             .and()
-            .signWith(key)
+            .signWith(Keys.hmacShaKeyFor(secret.toByteArray()))
             .compact()
 
     fun generateAccessToken(email: String): String {
@@ -60,7 +58,7 @@ class JwtService {
 
     private fun getAllClaims(token: String): Claims {
         val parser = Jwts.parser()
-            .verifyWith(key)
+            .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
             .build()
 
         return parser.parseSignedClaims(token).payload
