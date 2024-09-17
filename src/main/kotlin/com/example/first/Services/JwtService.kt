@@ -1,10 +1,10 @@
 package com.example.first.Services
 
+import com.example.first.configuration.yaml.JwtProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.Instant
@@ -14,16 +14,7 @@ import java.util.*
 class JwtService {
 
     @Autowired
-    @Value("\${jwt.secret}")
-    private lateinit var secret: String
-
-    @Autowired
-    @Value("\${jwt.access-expired}")
-    private lateinit var accessExpired: String
-
-    @Autowired
-    @Value("\${jwt.refresh-expired}")
-    private lateinit var refreshExpired: String
+    lateinit var properties: JwtProperties
 
     private fun generate(
         email: String,
@@ -37,17 +28,17 @@ class JwtService {
             .expiration(expirationDate)
             .add(additionalClaims)
             .and()
-            .signWith(Keys.hmacShaKeyFor(secret.toByteArray()))
+            .signWith(properties.getKey())
             .compact()
 
     fun generateAccessToken(email: String): String {
-        val duration = Duration.ofSeconds(accessExpired.toLong())
+        val duration = Duration.ofSeconds(properties.getAccessExpiration())
         val expirationTime = Date.from(Instant.now() + duration)
         return generate(email, expirationTime)
     }
 
     fun generateRefreshToken(email: String): String {
-        val duration = Duration.ofSeconds(refreshExpired.toLong())
+        val duration = Duration.ofSeconds(properties.getRefreshExpiration())
         val expirationTime = Date.from(Instant.now() + duration)
         return generate(email, expirationTime)
     }
@@ -58,7 +49,7 @@ class JwtService {
 
     private fun getAllClaims(token: String): Claims {
         val parser = Jwts.parser()
-            .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
+            .verifyWith(properties.getKey())
             .build()
 
         return parser.parseSignedClaims(token).payload
