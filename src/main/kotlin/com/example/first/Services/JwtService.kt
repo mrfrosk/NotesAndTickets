@@ -3,6 +3,7 @@ package com.example.first.Services
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -11,7 +12,19 @@ import java.util.*
 
 @Service
 class JwtService {
-    private val secret: String = "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855"
+
+    @Autowired
+    @Value("\${jwt.secret}")
+    private lateinit var secret: String
+
+    @Autowired
+    @Value("\${jwt.access-expired}")
+    private lateinit var accessExpired: String
+
+    @Autowired
+    @Value("\${jwt.refresh-expired}")
+    private lateinit var refreshExpired: String
+
     private val key = Keys.hmacShaKeyFor(secret.toByteArray())
 
     private fun generate(
@@ -30,12 +43,14 @@ class JwtService {
             .compact()
 
     fun generateAccessToken(email: String): String {
-        val expirationTime = Date.from(Instant.now() + Duration.ofMinutes(50))
+        val duration = Duration.ofSeconds(accessExpired.toLong())
+        val expirationTime = Date.from(Instant.now() + duration)
         return generate(email, expirationTime)
     }
 
     fun generateRefreshToken(email: String): String {
-        val expirationTime = Date.from(Instant.now() + Duration.ofDays(30))
+        val duration = Duration.ofSeconds(refreshExpired.toLong())
+        val expirationTime = Date.from(Instant.now() + duration)
         return generate(email, expirationTime)
     }
 
