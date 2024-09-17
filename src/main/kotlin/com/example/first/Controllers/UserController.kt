@@ -7,6 +7,7 @@ import com.example.first.database.dto.UserInfoDto
 import com.example.first.database.entities.User
 import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,20 +22,22 @@ class UserController {
     lateinit var userService: UserService
 
     @PostMapping("reg-user")
-    fun createUser(@RequestBody user: String): Boolean {
+    fun createUser(@RequestBody user: String): ResponseEntity<*> {
         val userFullDto = Json.decodeFromString<UserFullDto>(user)
         userService.createUser(userFullDto)
-        return true
+        return ResponseEntity.ok().body(true)
     }
 
     @GetMapping("get-user/{email}")
-    fun getUser(@PathVariable("email") email: String): User {
-        return userService.getUser(email)
+    fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
+        val user = userService.getUser(email).toInfoDto()
+        return ResponseEntity.ok().body(user)
     }
 
     @GetMapping
-    fun getUsers(): List<UserInfoDto> {
-        return userService.getUsers()
+    fun getUsers(): ResponseEntity<*> {
+        val users = userService.getUsers()
+        return ResponseEntity.ok().body(users)
     }
 
     @PostMapping("login")
