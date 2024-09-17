@@ -12,7 +12,7 @@ import org.springframework.http.HttpHeaders
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(Mapping.AUTH)
 class AuthController {
     @Autowired
     lateinit var authService: AuthService

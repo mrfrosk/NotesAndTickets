@@ -3,6 +3,6 @@ package com.example.first.configuration
 import org.jetbrains.exposed.sql.Schema
 
 object Config {
-    val schemaName = "work"
-    val schema = Schema(schemaName)
+    const val SCHEMA_NAME = "work"
+    val schema = Schema(SCHEMA_NAME)
 }

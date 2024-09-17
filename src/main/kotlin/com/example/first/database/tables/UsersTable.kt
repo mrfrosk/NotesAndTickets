@@ -1,10 +1,9 @@
 package com.example.first.database.tables
 
 import com.example.first.configuration.Config
-import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 
-object UsersTable: UUIDTable("${Config.schemaName}.users") {
+object UsersTable: UUIDTable("${Config.SCHEMA_NAME}.users") {
     val email = varchar("email",200).uniqueIndex()
     val name = varchar("name", 100)
     val surname = varchar("surname", 100)

@@ -15,25 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(Mapping.USERS)
 class UserController {
     @Autowired
     lateinit var userService: UserService
 
-    @PostMapping("reg-user")
+    @PostMapping("/reg-user")
     fun createUser(@RequestBody user: String): ResponseEntity<*> {
         val userFullDto = Json.decodeFromString<UserFullDto>(user)
         userService.createUser(userFullDto)
         return ResponseEntity.ok().body(true)
     }
 
-    @GetMapping("get-user/{email}")
+    @GetMapping("/get-user/{email}")
     fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
         val user = userService.getUser(email).toInfoDto()
         return ResponseEntity.ok().body(user)
     }
 
-    @GetMapping
+    @GetMapping("/all")
     fun getUsers(): ResponseEntity<*> {
         val users = userService.getUsers()
         return ResponseEntity.ok().body(users)

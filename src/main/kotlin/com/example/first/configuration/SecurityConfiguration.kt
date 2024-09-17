@@ -1,5 +1,6 @@
 package com.example.first.configuration
 
+import com.example.first.Controllers.Mapping
 import com.example.first.filters.JwtAuthenticationFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -26,12 +27,10 @@ class SecurityConfiguration{
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/api/auth", "api/auth/refresh", "/error")
+                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/auth/login")
+                    .requestMatchers("${Mapping.NOTES}/**")
                     .permitAll()
-                    .requestMatchers("/notes/**")
-                    .authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
