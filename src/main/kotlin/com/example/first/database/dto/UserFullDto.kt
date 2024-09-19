@@ -3,7 +3,7 @@ package com.example.first.database.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserFullDto(
+data class  UserFullDto(
     var email: String,
     var name: String,
     var surname: String,

@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration{
+class SecurityConfiguration {
     @Autowired
     lateinit var jwtAuthenticationFilter: JwtAuthenticationFilter
 
@@ -27,6 +27,8 @@ class SecurityConfiguration{
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
+                    .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
+                    .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
                     .permitAll()
                     .requestMatchers("${Mapping.NOTES}/**")

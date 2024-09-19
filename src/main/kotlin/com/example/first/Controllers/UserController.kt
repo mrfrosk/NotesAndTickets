@@ -20,7 +20,7 @@ class UserController {
     @Autowired
     lateinit var userService: UserService
 
-    @PostMapping("/reg-user")
+    @PostMapping("/new")
     fun createUser(@RequestBody user: String): ResponseEntity<*> {
         val userFullDto = Json.decodeFromString<UserFullDto>(user)
         userService.createUser(userFullDto)
@@ -38,5 +38,10 @@ class UserController {
         val users = userService.getUsers()
         return ResponseEntity.ok().body(users)
     }
+
+    @GetMapping("/hello")
+    fun hello() = "hello"
+    @PostMapping("/hi")
+    fun hi() = "hi form server"
 
 }
