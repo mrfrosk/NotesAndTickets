@@ -42,8 +42,8 @@ class UserService {
 
     fun getUser(email: String): User {
         val user = transaction {
-            User.find { UsersTable.email eq email }
-        }.firstOrNull()
+            User.find { UsersTable.email eq email }.firstOrNull()
+        }
         require(user != null) { "Пользователя с электронной почтой $email не существует " }
         return user
     }

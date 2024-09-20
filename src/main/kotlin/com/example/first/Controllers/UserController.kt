@@ -27,7 +27,7 @@ class UserController {
         return ResponseEntity.ok().body(true)
     }
 
-    @GetMapping("/get-user/{email}")
+    @GetMapping("/user/{email}")
     fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
         val user = userService.getUser(email).toInfoDto()
         return ResponseEntity.ok().body(user)
