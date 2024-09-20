@@ -1,6 +1,7 @@
 val psqlVersion = "42.7.2"
 val exposedVersion = "0.54.0"
 val jwtVersion = "0.12.3"
+val mailVersion = "8.6.3"
 plugins {
     kotlin("jvm") version "2.0.20"
     kotlin("plugin.serialization") version "2.0.20"
@@ -35,6 +36,7 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-dao", exposedVersion)
     implementation("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
     implementation("org.jetbrains.exposed", "exposed-spring-boot-starter", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-kotlin-datetime", exposedVersion)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
     implementation("io.ktor:ktor-server-core:2.3.12")
     implementation("io.ktor:ktor-server-netty:2.3.12")
@@ -42,6 +44,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
     implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.simplejavamail:simple-java-mail:$mailVersion")
     testImplementation("org.springframework.security:spring-security-test")
 
 
