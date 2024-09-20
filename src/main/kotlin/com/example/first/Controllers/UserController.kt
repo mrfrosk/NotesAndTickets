@@ -20,14 +20,14 @@ class UserController {
     @Autowired
     lateinit var userService: UserService
 
-    @PostMapping("/reg-user")
+    @PostMapping("/new")
     fun createUser(@RequestBody user: String): ResponseEntity<*> {
         val userFullDto = Json.decodeFromString<UserFullDto>(user)
         userService.createUser(userFullDto)
         return ResponseEntity.ok().body(true)
     }
 
-    @GetMapping("/get-user/{email}")
+    @GetMapping("/user/{email}")
     fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
         val user = userService.getUser(email).toInfoDto()
         return ResponseEntity.ok().body(user)

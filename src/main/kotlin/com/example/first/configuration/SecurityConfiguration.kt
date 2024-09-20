@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration{
+class SecurityConfiguration {
     @Autowired
     lateinit var jwtAuthenticationFilter: JwtAuthenticationFilter
 
@@ -30,7 +30,19 @@ class SecurityConfiguration{
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
                     .permitAll()
                     .requestMatchers("${Mapping.NOTES}/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.PUT, "${Mapping.NOTES}/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTES}/**")
+                    .authenticated()
+                    .requestMatchers("${Mapping.USERS}/all")
                     .permitAll()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
+                    .permitAll()
+                    .requestMatchers("${Mapping.USERS}/user/**")
+                    .permitAll()
+
+
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
