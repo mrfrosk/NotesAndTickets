@@ -45,6 +45,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.simplejavamail:simple-java-mail:$mailVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
     testImplementation("org.springframework.security:spring-security-test")
 
 

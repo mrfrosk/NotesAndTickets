@@ -56,7 +56,7 @@ class NoteService {
         return note
     }
 
-    fun deleteNote(title: String){
+    fun deleteNote(title: String) {
         transaction {
             NotesTable.deleteWhere { NotesTable.title eq title }
         }

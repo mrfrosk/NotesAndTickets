@@ -1,19 +1,41 @@
 package com.example.first
 
+import com.example.first.Services.NotificationService
 import com.example.first.Services.utils.MailSender
-import com.example.first.configuration.yaml.SmtpProperties
+import com.example.first.database.entities.Notification
+import com.example.first.database.tables.NotificationsTable
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.time.Duration
+import kotlin.time.toKotlinDuration
 
 @SpringBootTest
 class FirstApplicationTests {
 
-	@Autowired
-	lateinit var sender: MailSender
-	@Test
-	fun send(){
-		sender.send("heroker44@gmail.com", "Можно релизить", "Оповещение")
-	}
+    @Autowired
+    lateinit var sender: MailSender
+
+    @Autowired
+    lateinit var notificationService: NotificationService
+
+    @Test
+    fun send() {
+        sender.send("heroker44@gmail.com", "Можно релизить", "Оповещение")
+    }
+
+    @Test
+    fun time() {
+        println(notificationService.getMidnightTime())
+        println(notificationService.getDailyNotifications().size)
+    }
+
+
 
 }
