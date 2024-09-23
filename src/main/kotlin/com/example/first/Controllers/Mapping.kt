@@ -5,5 +5,6 @@ object Mapping {
     const val USERS = "$CORE/users"
     const val AUTH = "$CORE/auth"
     const val NOTES = "$CORE/notes"
+    const val NOTIFICATIONS = "$CORE/notifications"
 
 }

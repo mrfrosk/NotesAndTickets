@@ -10,5 +10,7 @@ data class NoteDto(
     val title: String,
     val text: String,
     @Serializable(with = UUIDSerializer::class)
-    val userId: UUID
+    val userId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID?=null
 )

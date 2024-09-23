@@ -16,5 +16,5 @@ data class Note(val _id: EntityID<UUID>) : Entity<UUID>(_id) {
     var title by NotesTable.title
     var text by NotesTable.text
     var user by User referencedOn NotesTable.user
-    fun toDto() = transaction { NoteDto(title, text, user.id.value) }
+    fun toDto() = transaction { NoteDto(title, text, user.id.value, _id.value) }
 }
