@@ -5,6 +5,7 @@ import com.example.first.database.dto.UserFullDto
 import com.example.first.database.dto.UserInfoDto
 import com.example.first.database.entities.User
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,21 +22,27 @@ class UserController {
     lateinit var userService: UserService
 
     @PostMapping("/new")
-    fun createUser(@RequestBody user: String): ResponseEntity<*> {
+    suspend fun createUser(@RequestBody user: String): ResponseEntity<*> {
         val userFullDto = Json.decodeFromString<UserFullDto>(user)
-        userService.createUser(userFullDto)
+        newSuspendedTransaction {
+            userService.createUser(userFullDto)
+        }
         return ResponseEntity.ok().body(true)
     }
 
     @GetMapping("/user/{email}")
-    fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
-        val user = userService.getUser(email).toInfoDto()
+    suspend fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
+        val user = newSuspendedTransaction {
+            userService.getUser(email).toInfoDto()
+        }
         return ResponseEntity.ok().body(user)
     }
 
     @GetMapping("/all")
-    fun getUsers(): ResponseEntity<*> {
-        val users = userService.getUsers()
+    suspend fun getUsers(): ResponseEntity<*> {
+        val users = newSuspendedTransaction {
+            userService.getUsers()
+        }
         return ResponseEntity.ok().body(users)
     }
 

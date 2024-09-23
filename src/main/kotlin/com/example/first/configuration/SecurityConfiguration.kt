@@ -26,27 +26,26 @@ class SecurityConfiguration {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(HttpMethod.POST,"${Mapping.NOTIFICATIONS}/new")
+                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTIFICATIONS}/new")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
                     .permitAll()
-                    .requestMatchers("${Mapping.NOTES}/**")
-                    .authenticated()
-                    .requestMatchers(HttpMethod.PUT, "${Mapping.NOTES}/**")
-                    .authenticated()
-                    .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTES}/**")
-                    .authenticated()
                     .requestMatchers("${Mapping.USERS}/all")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
                     .permitAll()
                     .requestMatchers("${Mapping.USERS}/user/**")
                     .permitAll()
-
-
-
+                    .requestMatchers("${Mapping.NOTES}/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTES}/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTES}/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.PUT, "${Mapping.NOTES}/**")
+                    .authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

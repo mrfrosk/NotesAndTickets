@@ -4,6 +4,10 @@ import com.example.first.Services.NotificationService
 import com.example.first.Services.utils.MailSender
 import com.example.first.database.entities.Notification
 import com.example.first.database.tables.NotificationsTable
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -24,6 +28,8 @@ class FirstApplicationTests {
 
     @Autowired
     lateinit var notificationService: NotificationService
+    val client = HttpClient(CIO)
+    val serverAddress = "http://localhost:8080/api/suspend"
 
     @Test
     fun send() {
@@ -36,6 +42,13 @@ class FirstApplicationTests {
         println(notificationService.getDailyNotifications().size)
     }
 
+    @Test
+    fun suspendTest(){
+        runBlocking {
+            val request = client.get(serverAddress)
+            println(request.status)
+        }
+    }
 
 
 }

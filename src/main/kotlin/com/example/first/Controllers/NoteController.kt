@@ -4,18 +4,12 @@ import com.example.first.Services.NoteService
 import com.example.first.database.dto.NoteDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
+import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping(Mapping.NOTES)
@@ -24,35 +18,46 @@ class NoteController {
     @Autowired
     lateinit var noteService: NoteService
 
-    @PostMapping("/new")
-    fun createNote(@RequestBody note: String): ResponseEntity<*> {
-        val newNote = Json.decodeFromString<NoteDto>(note)
-        noteService.createNote(newNote)
-        return ResponseEntity.status(HttpStatus.OK).body(null)
-    }
 
-    @GetMapping("/{user-id}")
-    fun getUserNotes(@PathVariable("user-id") userId: UUID): ResponseEntity<*> {
-        val users = noteService.getUserNotes(userId)
-        return ResponseEntity.status(HttpStatus.OK).body(Json.encodeToString(users))
+    @GetMapping("/{id}")
+    suspend fun getUserNotes(@PathVariable("id") id: UUID): ResponseEntity<*> {
+        val users = newSuspendedTransaction {
+            noteService.getUserNotes(id)
+        }
+        return ResponseEntity.ok().body(Json.encodeToString(users))
     }
 
     @GetMapping("/note/{title}")
-    fun getByTitle(@PathVariable("title") title: String): ResponseEntity<*> {
-        val note = noteService.getNote(title).toDto()
+    suspend fun getByTitle(@PathVariable("title") title: String): ResponseEntity<*> {
+        val note = newSuspendedTransaction {
+            noteService.getNote(title).toDto()
+        }
         return ResponseEntity.status(HttpStatus.OK).body(Json.encodeToString(note))
     }
 
+    @PostMapping("/new")
+    suspend fun createNote(@RequestBody note: String): ResponseEntity<*> {
+        val newNote = Json.decodeFromString<NoteDto>(note)
+        newSuspendedTransaction {
+            noteService.createNote(newNote)
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null)
+    }
+
     @PutMapping("/{title}")
-    fun updateNote(
+    suspend fun updateNote(
         @PathVariable("title") title: String,
         @RequestBody text: String
     ) {
-        noteService.updateNote(title, text)
+        newSuspendedTransaction {
+            noteService.updateNote(title, text)
+        }
     }
 
     @DeleteMapping("/{title}")
-    fun deleteNote(@PathVariable title: String) {
-        noteService.deleteNote(title)
+    suspend fun deleteNote(@PathVariable title: String) {
+        newSuspendedTransaction {
+            noteService.deleteNote(title)
+        }
     }
 }

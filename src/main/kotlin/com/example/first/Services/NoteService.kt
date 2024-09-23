@@ -13,53 +13,41 @@ import java.util.UUID
 @Service
 class NoteService {
 
-    fun createNote(note: NoteDto): Note {
+    suspend fun createNote(note: NoteDto): Note {
 
-        return transaction {
-            Note.new {
-                this.title = note.title
-                this.text = note.text
-                this.user = User[note.userId]
-            }
-        }
-
-    }
-
-    fun getNote(id: UUID): Note {
-        return transaction {
-            Note[id]
+        return Note.new {
+            this.title = note.title
+            this.text = note.text
+            this.user = User[note.userId]
         }
     }
 
-    fun getNote(title: String): Note {
-        val note = transaction {
-            Note.find {
+    suspend fun getNote(id: UUID): Note {
+        return Note[id]
+
+    }
+
+    suspend fun getNote(title: String): Note {
+        val note = Note.find {
                 NotesTable.title eq title
             }.firstOrNull()
-        }
+
         require(note != null) { "Заметки с названием $title не существует" }
         return note
     }
 
-    fun getUserNotes(userId: UUID): List<NoteDto> {
-        return transaction {
-            Note.find { NotesTable.user eq userId }.map { it.toDto() }
-        }.toList()
-
+    suspend fun getUserNotes(userId: UUID): List<NoteDto> {
+        return Note.find { NotesTable.user eq userId }.map { it.toDto() }.toList()
     }
 
-    fun updateNote(title: String, text: String): Note {
+    suspend fun updateNote(title: String, text: String): Note {
         val note = getNote(title)
-        transaction {
-            note.text = text
-        }
+        note.text = text
         return note
     }
 
-    fun deleteNote(title: String) {
-        transaction {
-            NotesTable.deleteWhere { NotesTable.title eq title }
-        }
+    suspend fun deleteNote(title: String) {
+        NotesTable.deleteWhere { NotesTable.title eq title }
     }
 
 }

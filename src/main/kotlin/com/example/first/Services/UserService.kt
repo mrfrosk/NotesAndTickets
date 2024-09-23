@@ -14,36 +14,34 @@ import org.springframework.stereotype.Service
 @Service
 class UserService {
 
-    fun createUser(userFullDto: UserFullDto) {
-        transaction {
-            val conditions = userCondition(
-                userFullDto.email,
-                userFullDto.name,
-                userFullDto.surname,
-                userFullDto.patronymic
-            )
-            val user = User.find { conditions.reduce { acc, op -> acc and op } }.firstOrNull()
-            require(user == null) { " Данный пользователь уже существует " }
-            User.new {
-                email = userFullDto.email
-                name = userFullDto.name
-                surname = userFullDto.surname
-                patronymic = userFullDto.patronymic
-                password = Hashing.toSha256(userFullDto.password)
-            }
+    suspend fun createUser(userFullDto: UserFullDto) {
+
+        val conditions = userCondition(
+            userFullDto.email,
+            userFullDto.name,
+            userFullDto.surname,
+            userFullDto.patronymic
+        )
+        val user = User.find { conditions.reduce { acc, op -> acc and op } }.firstOrNull()
+        require(user == null) { " Данный пользователь уже существует " }
+        User.new {
+            email = userFullDto.email
+            name = userFullDto.name
+            surname = userFullDto.surname
+            patronymic = userFullDto.patronymic
+            password = Hashing.toSha256(userFullDto.password)
         }
+
     }
 
-    fun getUsers(): List<UserInfoDto> {
-        return transaction {
-            User.all().map { it.toInfoDto() }
-        }
+    suspend fun getUsers(): List<UserInfoDto> {
+        return User.all().map { it.toInfoDto() }
     }
 
-    fun getUser(email: String): User {
-        val user = transaction {
+    suspend fun getUser(email: String): User {
+        val user =
             User.find { UsersTable.email eq email }.firstOrNull()
-        }
+
         require(user != null) { "Пользователя с электронной почтой $email не существует " }
         return user
     }
@@ -56,7 +54,7 @@ class UserService {
         } != null
     }
 
-    fun updateUser(email: String, userFullDto: UserFullDto) {
+    suspend fun updateUser(email: String, userFullDto: UserFullDto) {
         val user = getUser(email)
         user.email = userFullDto.email
         user.name = userFullDto.name
