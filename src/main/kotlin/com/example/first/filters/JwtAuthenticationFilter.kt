@@ -1,6 +1,7 @@
 package com.example.first.filters
 
 
+import com.example.first.Services.AuthService
 import com.example.first.Services.JwtService
 import com.example.first.Services.UserService
 import jakarta.servlet.FilterChain
@@ -19,7 +20,7 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
     @Autowired
     lateinit var tokenService: JwtService
     @Autowired
-    lateinit var userService: UserService
+    lateinit var authService: AuthService
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -36,7 +37,7 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         val jwtToken = authHeader!!.extractTokenValue()
         val email = tokenService.getEmail(jwtToken)
 
-        if (userService.isExistsByEmail(email)) {
+        if (authService.isExistsByEmail(email)) {
             updateContext(email, request)
             filterChain.doFilter(request, response)
         }

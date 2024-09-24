@@ -19,4 +19,12 @@ class AuthService {
         }
         return authSuccessful != null
     }
+
+    fun isExistsByEmail(email: String): Boolean {
+        return transaction {
+            User.find {
+                UsersTable.email eq email
+            }.firstOrNull()
+        } != null
+    }
 }

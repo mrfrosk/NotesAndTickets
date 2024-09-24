@@ -31,7 +31,6 @@ class UserService {
             patronymic = userFullDto.patronymic
             password = Hashing.toSha256(userFullDto.password)
         }
-
     }
 
     suspend fun getUsers(): List<UserInfoDto> {
@@ -44,14 +43,6 @@ class UserService {
 
         require(user != null) { "Пользователя с электронной почтой $email не существует " }
         return user
-    }
-
-    fun isExistsByEmail(email: String): Boolean {
-        return transaction {
-            User.find {
-                UsersTable.email eq email
-            }.firstOrNull()
-        } != null
     }
 
     suspend fun updateUser(email: String, userFullDto: UserFullDto) {

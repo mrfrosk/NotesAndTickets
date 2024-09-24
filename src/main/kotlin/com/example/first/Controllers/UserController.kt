@@ -46,9 +46,4 @@ class UserController {
         return ResponseEntity.ok().body(users)
     }
 
-    @GetMapping("/hello")
-    fun hello() = "hello"
-    @PostMapping("/hi")
-    fun hi() = "hi form server"
-
 }

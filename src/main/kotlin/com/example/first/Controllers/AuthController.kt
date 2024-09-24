@@ -20,12 +20,16 @@ class AuthController {
     lateinit var jwtService: JwtService
 
     @PostMapping("/login")
-    fun authUser(@RequestBody authBody: String): ResponseEntity<*> {
+    suspend fun authUser(@RequestBody authBody: String): ResponseEntity<*> {
         val userInfo = Json.decodeFromString<AuthDto>(authBody)
         val responseHeader = HttpHeaders()
         val accessToken = jwtService.generateAccessToken(userInfo.email)
         val refreshToken = jwtService.generateRefreshToken(userInfo.email)
         val jwt = JwtDto(accessToken, refreshToken)
-        return ResponseEntity.ok().headers(responseHeader).body(jwt)
+        return if (authService.authUser(userInfo)){
+            ResponseEntity.ok().headers(responseHeader).body(jwt)
+        }else{
+            ResponseEntity.ok().headers(responseHeader).body(null)
+        }
     }
 }
