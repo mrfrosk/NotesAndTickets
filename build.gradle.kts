@@ -52,8 +52,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.9.0")
     testImplementation("org.springframework.security:spring-security-test")
-
-
 }
 
 kotlin {

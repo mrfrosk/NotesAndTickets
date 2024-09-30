@@ -8,6 +8,7 @@ import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
 import com.example.first.database.tables.UsersTable
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.AfterEach
@@ -62,23 +63,29 @@ class NoteServiceTest {
 
     @Test
     fun createNote() {
-        val dto = NoteDto("asda", "asdas", userId)
-        val note  = noteService.createNote(dto).toDto()
-        assertEquals(dto, note)
+       runBlocking {
+           val dto = NoteDto("asda", "asdas", userId)
+           val note  = noteService.createNote(dto).toDto()
+           assertEquals(dto, note)
+       }
     }
 
 
     @Test
     fun getNote() {
-        transaction {  }
-        val note = transaction {  noteService.getNote(noteId).toDto() }
-        assertEquals(noteDto, note)
+
+       runBlocking{
+           val note = noteService.getNote(noteId).toDto()
+           assertEquals(noteDto, note)
+       }
     }
 
     @Test
     fun getUserNotes(){
-        transaction {
+        runBlocking {
+
             noteService.getUserNotes(userId)
+
         }
     }
 

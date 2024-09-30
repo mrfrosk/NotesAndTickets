@@ -16,6 +16,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.time.Duration
 import kotlin.time.toKotlinDuration
@@ -50,5 +51,6 @@ class FirstApplicationTests {
         }
     }
 
-
 }
+
+
