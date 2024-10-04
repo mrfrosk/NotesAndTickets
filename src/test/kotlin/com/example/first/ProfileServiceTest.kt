@@ -5,7 +5,9 @@ import com.example.first.Services.utils.Hashing
 import com.example.first.database.dto.UserFullDto
 import com.example.first.database.entities.User
 import com.example.first.database.tables.UsersTable
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -39,29 +41,33 @@ class ProfileServiceTest {
 
     @Test
     fun getUserSuccessful() {
-        val user = transaction {
-            userService.getUser(userFullDto.email).toFullDto()
+        runBlocking {
+            val user = newSuspendedTransaction {
+                userService.getUser(userFullDto.email).toFullDto()
+            }
+            assertEquals(userFullDto, user)
         }
-        assertEquals(userFullDto, user)
     }
 
     @Test
     fun getUserUnsuccessful() {
-        assertThrows<IllegalArgumentException> {
-            transaction {
-                userService.getUser("asdasdasdas")
+        runBlocking {
+            assertThrows<IllegalArgumentException> {
+                newSuspendedTransaction {
+                    userService.getUser("asdasdasdas")
+                }
             }
         }
     }
 
     @Test
     fun updateUser() {
-        val user = transaction {
+        runBlocking { val user = newSuspendedTransaction {
             userService.updateUser(mail, userFullDto2)
             userService.getUser(mail2)
         }
-        userFullDto2.password = Hashing.toSha256(userFullDto2.password)
-        assertEquals(userFullDto2, user.toFullDto())
+            userFullDto2.password = Hashing.toSha256(userFullDto2.password)
+            assertEquals(userFullDto2, user.toFullDto()) }
     }
 
     @BeforeEach

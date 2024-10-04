@@ -9,8 +9,12 @@ import javax.crypto.SecretKey
 @Component
 class JwtProperties {
     @Autowired
-    @Value("\${jwt.secret}")
-    private lateinit var secret: String
+    @Value("\${jwt.access.secret}")
+    private lateinit var accessSecret: String
+
+    @Autowired
+    @Value("\${jwt.refresh.secret}")
+    private lateinit var refreshSecret: String
 
     @Autowired
     @Value("\${jwt.access.expiration}")
@@ -20,7 +24,8 @@ class JwtProperties {
     @Value("\${jwt.refresh.expiration}")
     private lateinit var refreshExpiration: String
 
-    fun getKey(): SecretKey = Keys.hmacShaKeyFor(secret.toByteArray())
+    fun getAccessKey(): SecretKey = Keys.hmacShaKeyFor(accessSecret.toByteArray())
+    fun getRefreshKey(): SecretKey = Keys.hmacShaKeyFor(refreshSecret.toByteArray())
     fun getAccessExpiration() = accessExpiration.toLong()
     fun getRefreshExpiration() = accessExpiration.toLong()
 

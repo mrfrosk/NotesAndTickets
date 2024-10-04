@@ -5,9 +5,13 @@ import com.example.first.Services.AuthService
 import com.example.first.Services.JwtService
 import com.example.first.Services.UserService
 import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletResponseWrapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -28,8 +32,8 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
         val authHeader: String? = request.getHeader("Authorization")
-
         if (authHeader.doesNotContainBearerToken()) {
+            response.status = 402
             filterChain.doFilter(request, response)
             return
         }
@@ -53,7 +57,6 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
     fun updateContext(email: String, request: HttpServletRequest) {
         val authToken = UsernamePasswordAuthenticationToken(email, null, null)
         authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-        println(authToken)
         SecurityContextHolder.getContext().authentication = authToken
         println(SecurityContextHolder.getContext().authentication)
     }

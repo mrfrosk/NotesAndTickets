@@ -1,7 +1,6 @@
 package com.example.first.configuration
 
 
-import com.example.first.configuration.Config
 import com.example.first.database.tables.NotesTable
 import com.example.first.database.tables.NotificationsTable
 import com.example.first.database.tables.UsersTable
@@ -13,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
-class SchemaInitialize : ApplicationRunner {
+class SchemaInitializer : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
         SchemaUtils.createSchema(Config.schema)

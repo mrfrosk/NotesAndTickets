@@ -1,6 +1,7 @@
 package com.example.first.Services
 
 import com.example.first.Services.dto.AuthDto
+import com.example.first.Services.enums.LoginStatus
 import com.example.first.Services.utils.Hashing
 import com.example.first.database.entities.User
 import com.example.first.database.tables.UsersTable
@@ -10,14 +11,18 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthService {
-    fun authUser(authDto: AuthDto): Boolean {
+    fun login(authDto: AuthDto): LoginStatus {
         val authSuccessful = transaction {
             User.find {
                 (UsersTable.email eq authDto.email) and
                         (UsersTable.password eq Hashing.toSha256(authDto.password))
             }.firstOrNull()
         }
-        return authSuccessful != null
+        return if (authSuccessful != null){
+            LoginStatus.Success
+        } else{
+            LoginStatus.Denied
+        }
     }
 
     fun isExistsByEmail(email: String): Boolean {
