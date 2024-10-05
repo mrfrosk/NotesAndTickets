@@ -28,13 +28,14 @@ class SecurityConfiguration {
             .authorizeHttpRequests {
                 it
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
-                    .permitAll()
-                    .requestMatchers("${Mapping.USERS}/**")
-                    .authenticated()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new").permitAll()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login").permitAll()
+                    .requestMatchers("${Mapping.USERS}/**").authenticated()
                     .requestMatchers("${Mapping.NOTES}/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTES}/**").authenticated()
+                    .requestMatchers(HttpMethod.PUT, "${Mapping.NOTES}/**").authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTES}/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTIFICATIONS}/new").authenticated()
 
             }
             .sessionManagement {

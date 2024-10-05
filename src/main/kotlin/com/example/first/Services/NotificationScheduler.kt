@@ -11,7 +11,6 @@ class NotificationScheduler {
     @Autowired
     lateinit var notificationService: NotificationService
 
-
     @Scheduled(cron = "@daily")
     fun notification(){
         println("hello world")
