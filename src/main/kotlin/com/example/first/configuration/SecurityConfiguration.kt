@@ -28,23 +28,14 @@ class SecurityConfiguration {
             .authorizeHttpRequests {
                 it
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTIFICATIONS}/new")
-                    .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
-                    .permitAll()
-                    .requestMatchers("${Mapping.USERS}/**").authenticated()
-                    .requestMatchers("${Mapping.NOTES}/**")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTES}/**")
+                    .requestMatchers("${Mapping.USERS}/**")
                     .authenticated()
-                    .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTES}/**")
-                    .authenticated()
-                    .requestMatchers(HttpMethod.PUT, "${Mapping.NOTES}/**")
-                    .authenticated()
+                    .requestMatchers("${Mapping.NOTES}/**").authenticated()
+
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
