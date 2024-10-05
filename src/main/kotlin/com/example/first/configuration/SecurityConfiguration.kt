@@ -2,6 +2,7 @@ package com.example.first.configuration
 
 import com.example.first.Controllers.Mapping
 import com.example.first.filters.JwtAuthenticationFilter
+import jakarta.servlet.DispatcherType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,18 +27,16 @@ class SecurityConfiguration {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
+                    .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.NOTIFICATIONS}/new")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login")
                     .permitAll()
-                    .requestMatchers("${Mapping.USERS}/all")
-                    .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new")
                     .permitAll()
-                    .requestMatchers("${Mapping.USERS}/user/**")
-                    .permitAll()
+                    .requestMatchers("${Mapping.USERS}/**").authenticated()
                     .requestMatchers("${Mapping.NOTES}/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.NOTES}/**")
