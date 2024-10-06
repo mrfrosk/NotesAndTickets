@@ -18,11 +18,10 @@ class NoteController {
     @Autowired
     lateinit var noteService: NoteService
 
-
     @GetMapping("/{id}")
-    suspend fun getUserNotes(@PathVariable("id") id: UUID): ResponseEntity<*> {
+    suspend fun getUserNotes(@PathVariable("id") userId: UUID): ResponseEntity<*> {
         val users = newSuspendedTransaction {
-            noteService.getUserNotes(id)
+            noteService.getUserNotes(userId)
         }
         return ResponseEntity.ok().body(Json.encodeToString(users))
     }
@@ -35,7 +34,7 @@ class NoteController {
         return ResponseEntity.status(HttpStatus.OK).body(Json.encodeToString(note))
     }
 
-    @PostMapping("/new")
+    @PostMapping("/note/new")
     suspend fun createNote(@RequestBody note: String): ResponseEntity<*> {
         val newNote = Json.decodeFromString<NoteDto>(note)
         newSuspendedTransaction {
@@ -44,7 +43,7 @@ class NoteController {
         return ResponseEntity.status(HttpStatus.OK).body(null)
     }
 
-    @PutMapping("/{title}")
+    @PutMapping("/note/{title}")
     suspend fun updateNote(
         @PathVariable("title") title: String,
         @RequestBody text: String
@@ -54,7 +53,7 @@ class NoteController {
         }
     }
 
-    @DeleteMapping("/{title}")
+    @DeleteMapping("/note/{title}")
     suspend fun deleteNote(@PathVariable title: String) {
         newSuspendedTransaction {
             noteService.deleteNote(title)
