@@ -30,7 +30,7 @@ class UserController {
         return ResponseEntity.ok().body(true)
     }
 
-    @GetMapping("/user/{email}")
+    @GetMapping("/{email}")
     suspend fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {
             userService.getUser(email).toInfoDto()
@@ -45,5 +45,6 @@ class UserController {
         }
         return ResponseEntity.ok().body(users)
     }
+
 
 }
