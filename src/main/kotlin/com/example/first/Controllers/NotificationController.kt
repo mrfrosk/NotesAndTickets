@@ -2,8 +2,12 @@ package com.example.first.Controllers
 
 import com.example.first.Services.NotificationService
 import com.example.first.database.dto.NotificationDto
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.not
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,23 +24,28 @@ class NotificationController {
     lateinit var notificationService: NotificationService
 
     @PostMapping("/new")
-    fun createNotification(@RequestBody notification: String): Boolean {
+    suspend fun createNotification(@RequestBody notification: String): ResponseEntity<Nothing> {
         val notificationDto = Json.decodeFromString<NotificationDto>(notification)
         notificationService.createNotification(notificationDto)
-        return true
+        return ResponseEntity.ok().body(null)
     }
 
     @GetMapping("/{id}")
-    fun getNotifications(@PathVariable id: UUID): List<NotificationDto> {
-        return notificationService.getUserNotifications(id)
+    suspend fun getNotifications(@PathVariable id: UUID): ResponseEntity<String> {
+        val notifications = notificationService.getUserNotifications(id)
+        return ResponseEntity.ok().body(Json.encodeToString(notifications))
     }
 
     @DeleteMapping("/{noteId}")
     suspend fun deleteNotifications(@PathVariable noteId: UUID){
-        notificationService.deleteNotifications(noteId)
+        newSuspendedTransaction {
+            notificationService.deleteNotifications(noteId)
+        }
     }
     @DeleteMapping("/notification/{notificationId}")
     suspend fun deleteNotification(@PathVariable notificationId: UUID){
-        notificationService.deleteNotification(notificationId)
+        newSuspendedTransaction {
+            notificationService.deleteNotification(notificationId)
+        }
     }
 }

@@ -34,21 +34,18 @@ class NotificationService {
     fun getDailyNotifications(): List<Notification> {
         val startTime = getMidnightTime()
         val endTime = startTime.toInstant(TimeZone.UTC) + Duration.ofDays(2).toKotlinDuration()
-        return transaction {
-            Notification.find {
-                (NotificationsTable.date greaterEq startTime) and
-                        (NotificationsTable.date less endTime.toLocalDateTime(TimeZone.UTC))
-            }.toList()
-        }
+        return Notification.find {
+            (NotificationsTable.date greaterEq startTime) and
+                    (NotificationsTable.date less endTime.toLocalDateTime(TimeZone.UTC))
+        }.toList()
     }
 
-    fun getUserNotifications(id: UUID): List<NotificationDto>{
-        return transaction {
-            Notification.find { NotificationsTable.noteId eq id }.map { it.toDto() }
-        }
+    fun getUserNotifications(id: UUID): List<NotificationDto> {
+        return Notification.find { NotificationsTable.noteId eq id }.map { it.toDto() }
+
     }
 
-    fun getMidnightTime(): LocalDateTime {
+    private fun getMidnightTime(): LocalDateTime {
         val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val midnightTime = LocalDateTime(currentDateTime.date, LocalTime(0, 0))
         return midnightTime
@@ -56,25 +53,22 @@ class NotificationService {
 
     fun sendDailyNotification() {
         val notifications = getDailyNotifications()
-        val sandedNotify = transaction { notifications.map { it.text to it.note.user.email } }
+        val sandedNotify = notifications.map { it.text to it.note.user.email }
         sandedNotify.forEach {
             sender.send(it.second, it.first, "уведомление")
         }
     }
 
-    suspend fun deleteNotifications(noteId: UUID){
-        newSuspendedTransaction {
-            val notifications = Notification.find{NotificationsTable.noteId eq noteId}
-            notifications.forEach {
-                it.delete()
-            }
+    suspend fun deleteNotifications(noteId: UUID) {
+        val notifications = Notification.find { NotificationsTable.noteId eq noteId }
+        notifications.forEach {
+            it.delete()
         }
+
     }
 
-    suspend fun deleteNotification(notificationId: UUID){
-        newSuspendedTransaction {
-            Notification[notificationId].delete()
-        }
+    suspend fun deleteNotification(notificationId: UUID) {
+        Notification[notificationId].delete()
     }
 
 }
