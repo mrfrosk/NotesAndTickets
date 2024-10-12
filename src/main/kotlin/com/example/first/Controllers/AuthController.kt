@@ -33,7 +33,7 @@ class AuthController {
         return if (loginStatus == LoginStatus.Success) {
             ResponseEntity.ok().headers(responseHeader).body(jwt)
         } else {
-            ResponseEntity.ok().headers(responseHeader).body(loginStatus.description)
+            ResponseEntity.status(403).headers(responseHeader).body(loginStatus.description)
         }
     }
 

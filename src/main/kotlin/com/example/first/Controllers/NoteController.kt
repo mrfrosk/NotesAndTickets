@@ -44,10 +44,7 @@ class NoteController {
     }
 
     @PutMapping("/note/{title}")
-    suspend fun updateNote(
-        @PathVariable("title") title: String,
-        @RequestBody text: String
-    ) {
+    suspend fun updateNote(@PathVariable("title") title: String, @RequestBody text: String) {
         newSuspendedTransaction {
             noteService.updateNote(title, text)
         }

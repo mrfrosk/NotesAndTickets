@@ -1,6 +1,11 @@
 package com.example.first.Services.dto
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TokensDto(val accessToken: String, val refreshToken: String)
+data class TokensDto(
+    @SerialName("access-token")
+    val accessToken: String,
+    @SerialName("refresh-token")
+    val refreshToken: String)

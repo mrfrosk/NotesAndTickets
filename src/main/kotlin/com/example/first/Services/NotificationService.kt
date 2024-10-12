@@ -42,7 +42,6 @@ class NotificationService {
 
     fun getUserNotifications(id: UUID): List<NotificationDto> {
         return Notification.find { NotificationsTable.noteId eq id }.map { it.toDto() }
-
     }
 
     private fun getMidnightTime(): LocalDateTime {

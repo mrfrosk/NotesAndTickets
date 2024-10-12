@@ -13,7 +13,6 @@ import java.util.UUID
 class NoteService {
 
     suspend fun createNote(note: NoteDto): Note {
-
         return Note.new {
             this.title = note.title
             this.text = note.text
@@ -23,7 +22,6 @@ class NoteService {
 
     suspend fun getNote(id: UUID): Note {
         return Note[id]
-
     }
 
     suspend fun getNote(title: String): Note {

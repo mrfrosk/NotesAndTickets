@@ -24,28 +24,33 @@ class NotificationController {
     lateinit var notificationService: NotificationService
 
     @PostMapping("/new")
-    suspend fun createNotification(@RequestBody notification: String): ResponseEntity<Nothing> {
+    suspend fun createNotification(@RequestBody notification: String): ResponseEntity<*> {
         val notificationDto = Json.decodeFromString<NotificationDto>(notification)
         notificationService.createNotification(notificationDto)
         return ResponseEntity.ok().body(null)
     }
 
     @GetMapping("/{id}")
-    suspend fun getNotifications(@PathVariable id: UUID): ResponseEntity<String> {
-        val notifications = notificationService.getUserNotifications(id)
+    suspend fun getNotifications(@PathVariable id: UUID): ResponseEntity<*> {
+        val notifications = newSuspendedTransaction {
+            notificationService.getUserNotifications(id)
+        }
         return ResponseEntity.ok().body(Json.encodeToString(notifications))
     }
 
     @DeleteMapping("/{noteId}")
-    suspend fun deleteNotifications(@PathVariable noteId: UUID){
+    suspend fun deleteNotifications(@PathVariable noteId: UUID): ResponseEntity<*> {
         newSuspendedTransaction {
             notificationService.deleteNotifications(noteId)
         }
+        return ResponseEntity.ok().body(null)
     }
+
     @DeleteMapping("/notification/{notificationId}")
-    suspend fun deleteNotification(@PathVariable notificationId: UUID){
+    suspend fun deleteNotification(@PathVariable notificationId: UUID): ResponseEntity<*> {
         newSuspendedTransaction {
             notificationService.deleteNotification(notificationId)
         }
+        return ResponseEntity.ok().body(null)
     }
 }
