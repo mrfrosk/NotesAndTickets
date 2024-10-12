@@ -3,7 +3,7 @@ package com.example.first
 import com.example.first.Services.NoteService
 import com.example.first.Services.UserService
 import com.example.first.database.dto.NoteDto
-import com.example.first.database.dto.UserFullDto
+import com.example.first.database.dto.NewUserDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
@@ -29,7 +29,7 @@ class NoteServiceTest {
 
     final val userId: UUID = UUID.randomUUID()
     val noteId: UUID = UUID.randomUUID()
-    val userFullDto = UserFullDto(
+    val newUserDto = NewUserDto(
         "testMail1",
         "testName1",
         "testSurname1",
@@ -47,11 +47,11 @@ class NoteServiceTest {
     fun initData() {
         transaction {
             User.new(userId) {
-                this.email = userFullDto.email
-                this.name = userFullDto.name
-                this.surname = userFullDto.surname
-                this.patronymic = userFullDto.patronymic
-                this.password = userFullDto.password
+                this.email = newUserDto.email
+                this.name = newUserDto.name
+                this.surname = newUserDto.surname
+                this.patronymic = newUserDto.patronymic
+                this.password = newUserDto.password
             }
             Note.new(noteId) {
                 this.title = noteDto.title

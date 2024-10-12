@@ -1,7 +1,7 @@
 package com.example.first.database.entities
 
-import com.example.first.database.dto.UserInfoDto
-import com.example.first.database.dto.UserFullDto
+import com.example.first.database.dto.UserDto
+import com.example.first.database.dto.NewUserDto
 import com.example.first.database.tables.UsersTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
@@ -17,7 +17,7 @@ data class User(val _id: EntityID<UUID>) : Entity<UUID>(_id) {
     var patronymic by UsersTable.patronymic
     var password by UsersTable.password
 
-    fun toFullDto() = UserFullDto(email, name, surname, patronymic, password)
+    fun toNewDto() = NewUserDto(email, name, surname, patronymic, password)
 
-    fun toInfoDto() = UserInfoDto(name, surname, patronymic, email, id.value)
+    fun toDto() = UserDto(name, surname, patronymic, email, id.value)
 }

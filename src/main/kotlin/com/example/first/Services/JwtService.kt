@@ -2,10 +2,7 @@ package com.example.first.Services
 
 import com.example.first.configuration.yaml.JwtProperties
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.security.SignatureException
-import org.jetbrains.exposed.sql.Expression
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Duration

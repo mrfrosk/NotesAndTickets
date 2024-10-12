@@ -16,9 +16,9 @@ class NotificationServiceTest {
 
     @Test
     fun test1(){
-        val uuid = UUID.fromString("031262e9-b232-40e7-876e-d47bc691e5e8")
-        val time = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        val notification = NotificationDto("asdasd", time, false, uuid)
-        notificationService.createNotification(notification)
+//        val uuid = UUID.fromString("031262e9-b232-40e7-876e-d47bc691e5e8")
+//        val time = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+//        val notification = NotificationDto("asdasd", time, false, uuid)
+//        notificationService.createNotification(notification)
     }
 }

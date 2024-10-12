@@ -1,8 +1,8 @@
 package com.example.first.Services
 
 import com.example.first.Services.utils.Hashing
-import com.example.first.database.dto.UserFullDto
-import com.example.first.database.dto.UserInfoDto
+import com.example.first.database.dto.NewUserDto
+import com.example.first.database.dto.UserDto
 import com.example.first.database.entities.User
 import com.example.first.database.tables.UsersTable
 import org.jetbrains.exposed.sql.Op
@@ -13,27 +13,27 @@ import org.springframework.stereotype.Service
 @Service
 class UserService {
 
-    suspend fun createUser(userFullDto: UserFullDto) {
+    suspend fun createUser(newUserDto: NewUserDto) {
 
         val conditions = userCondition(
-            userFullDto.email,
-            userFullDto.name,
-            userFullDto.surname,
-            userFullDto.patronymic
+            newUserDto.email,
+            newUserDto.name,
+            newUserDto.surname,
+            newUserDto.patronymic
         )
         val user = User.find { conditions.reduce { acc, op -> acc and op } }.firstOrNull()
         require(user == null) { " Данный пользователь уже существует " }
         User.new {
-            email = userFullDto.email
-            name = userFullDto.name
-            surname = userFullDto.surname
-            patronymic = userFullDto.patronymic
-            password = Hashing.toSha256(userFullDto.password)
+            email = newUserDto.email
+            name = newUserDto.name
+            surname = newUserDto.surname
+            patronymic = newUserDto.patronymic
+            password = Hashing.toSha256(newUserDto.password)
         }
     }
 
-    suspend fun getUsers(): List<UserInfoDto> {
-        return User.all().map { it.toInfoDto() }
+    suspend fun getUsers(): List<UserDto> {
+        return User.all().map { it.toDto() }
     }
 
     suspend fun getUser(email: String): User {
@@ -44,13 +44,13 @@ class UserService {
         return user
     }
 
-    suspend fun updateUser(email: String, userFullDto: UserFullDto) {
+    suspend fun updateUser(email: String, newUserDto: NewUserDto) {
         val user = getUser(email)
-        user.email = userFullDto.email
-        user.name = userFullDto.name
-        user.surname = userFullDto.surname
-        user.patronymic = userFullDto.patronymic
-        user.password = Hashing.toSha256(userFullDto.password)
+        user.email = newUserDto.email
+        user.name = newUserDto.name
+        user.surname = newUserDto.surname
+        user.patronymic = newUserDto.patronymic
+        user.password = Hashing.toSha256(newUserDto.password)
     }
 
     private fun userCondition(

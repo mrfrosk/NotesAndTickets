@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class  UserFullDto(
+data class  NewUserDto(
     @SerialName("email")
     var email: String,
     @SerialName("name")

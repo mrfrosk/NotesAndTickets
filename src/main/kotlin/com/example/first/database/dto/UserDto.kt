@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
-data class UserInfoDto(
+data class UserDto(
     @SerialName("name")
     val name: String,
     @SerialName("surname")
