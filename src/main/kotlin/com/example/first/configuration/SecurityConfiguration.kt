@@ -29,13 +29,15 @@ class SecurityConfiguration {
                 it
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.USERS}/new").permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/**").permitAll()
                     .requestMatchers("${Mapping.USERS}/**").authenticated()
                     .requestMatchers("${Mapping.NOTES}/**").authenticated()
                     .requestMatchers(HttpMethod.POST, "${Mapping.NOTES}/**").authenticated()
                     .requestMatchers(HttpMethod.PUT, "${Mapping.NOTES}/**").authenticated()
                     .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTES}/**").authenticated()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTIFICATIONS}/new").authenticated()
+                    .requestMatchers("${Mapping.NOTIFICATIONS}/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.NOTIFICATIONS}/**").authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "${Mapping.NOTIFICATIONS}/**").authenticated()
 
             }
             .sessionManagement {

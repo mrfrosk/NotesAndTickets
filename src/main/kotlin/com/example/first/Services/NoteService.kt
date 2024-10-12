@@ -6,7 +6,6 @@ import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 import java.util.UUID
 

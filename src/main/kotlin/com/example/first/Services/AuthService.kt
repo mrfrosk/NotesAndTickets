@@ -32,4 +32,5 @@ class AuthService {
             }.firstOrNull()
         } != null
     }
+
 }

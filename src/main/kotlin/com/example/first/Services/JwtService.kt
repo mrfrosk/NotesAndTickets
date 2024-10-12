@@ -2,7 +2,10 @@ package com.example.first.Services
 
 import com.example.first.configuration.yaml.JwtProperties
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.security.SignatureException
+import org.jetbrains.exposed.sql.Expression
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -38,14 +41,35 @@ class JwtService {
         return generate(email, expirationTime, properties.getAccessKey())
     }
 
-    fun generateRefreshToken(email: String, instant: Instant?=null): String {
+    fun generateRefreshToken(email: String): String {
         val duration = Duration.ofSeconds(properties.getRefreshExpiration())
-        val expirationTime = Date.from(instant ?: (Instant.now() + duration))
+        val expirationTime = Date.from(Instant.now() + duration)
         return generate(email, expirationTime, properties.getRefreshKey())
     }
 
     fun getEmail(token: String): String {
         return getAllClaims(token).subject
+    }
+
+    fun verifyAccessToken(token: String): Boolean {
+        return verifyToken(token, properties.getAccessKey())
+    }
+
+    fun verifyRefreshToken(token: String): Boolean {
+        return verifyToken(token, properties.getRefreshKey())
+    }
+
+    fun verifyToken(token: String, key: SecretKey): Boolean {
+        val parser = Jwts.parser()
+            .verifyWith(key)
+            .build()
+        return try {
+            parser.parseSignedClaims(token)
+            true
+        } catch (e: Exception){
+            false
+        }
+
     }
 
     private fun getAllClaims(token: String): Claims {

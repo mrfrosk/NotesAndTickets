@@ -11,7 +11,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 import java.time.Duration
 import kotlinx.datetime.LocalDateTime
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
+import java.util.UUID
 import kotlin.time.toKotlinDuration
 
 @Service
@@ -40,6 +42,12 @@ class NotificationService {
         }
     }
 
+    fun getUserNotifications(id: UUID): List<NotificationDto>{
+        return transaction {
+            Notification.find { NotificationsTable.noteId eq id }.map { it.toDto() }
+        }
+    }
+
     fun getMidnightTime(): LocalDateTime {
         val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val midnightTime = LocalDateTime(currentDateTime.date, LocalTime(0, 0))
@@ -49,11 +57,23 @@ class NotificationService {
     fun sendDailyNotification() {
         val notifications = getDailyNotifications()
         val sandedNotify = transaction { notifications.map { it.text to it.note.user.email } }
-        println("кооличество уведмоленией ${notifications.size}")
         sandedNotify.forEach {
-            println("отправка началась")
             sender.send(it.second, it.first, "уведомление")
-            println("отправка должна закончиться")
+        }
+    }
+
+    suspend fun deleteNotifications(noteId: UUID){
+        newSuspendedTransaction {
+            val notifications = Notification.find{NotificationsTable.noteId eq noteId}
+            notifications.forEach {
+                it.delete()
+            }
+        }
+    }
+
+    suspend fun deleteNotification(notificationId: UUID){
+        newSuspendedTransaction {
+            Notification[notificationId].delete()
         }
     }
 

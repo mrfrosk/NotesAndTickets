@@ -1,7 +1,6 @@
 package com.example.first.database.dto
 
 import com.example.first.Services.utils.UUIDSerializer
-import com.example.first.database.entities.User
 import kotlinx.serialization.Serializable
 import java.util.UUID
 

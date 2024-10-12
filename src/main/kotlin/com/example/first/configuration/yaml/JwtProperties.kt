@@ -27,6 +27,6 @@ class JwtProperties {
     fun getAccessKey(): SecretKey = Keys.hmacShaKeyFor(accessSecret.toByteArray())
     fun getRefreshKey(): SecretKey = Keys.hmacShaKeyFor(refreshSecret.toByteArray())
     fun getAccessExpiration() = accessExpiration.toLong()
-    fun getRefreshExpiration() = accessExpiration.toLong()
+    fun getRefreshExpiration() = refreshExpiration.toLong()
 
 }

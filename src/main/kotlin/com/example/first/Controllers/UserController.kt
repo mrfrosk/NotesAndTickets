@@ -2,8 +2,6 @@ package com.example.first.Controllers
 
 import com.example.first.Services.UserService
 import com.example.first.database.dto.UserFullDto
-import com.example.first.database.dto.UserInfoDto
-import com.example.first.database.entities.User
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,7 +28,7 @@ class UserController {
         return ResponseEntity.ok().body(true)
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/user/{email}")
     suspend fun getUser(@PathVariable("email") email: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {
             userService.getUser(email).toInfoDto()

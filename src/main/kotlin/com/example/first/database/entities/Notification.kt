@@ -15,5 +15,5 @@ class Notification(val _id: EntityID<UUID>) : Entity<UUID>(_id) {
     var repeat by NotificationsTable.repeat
     var note by Note referencedOn NotificationsTable.noteId
 
-    fun toDto() = NotificationDto(text, date, repeat, note.id.value)
+    fun toDto() = NotificationDto(text, date, repeat, id.value, note.id.value)
 }
