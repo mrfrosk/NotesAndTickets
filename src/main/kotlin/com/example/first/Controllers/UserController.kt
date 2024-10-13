@@ -25,7 +25,7 @@ class UserController {
         newSuspendedTransaction {
             userService.createUser(newUserDto)
         }
-        return ResponseEntity.ok().body(true)
+        return ResponseEntity.ok().body(null)
     }
 
     @GetMapping("/user/{email}")

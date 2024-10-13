@@ -1,6 +1,7 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.NoteService
+import com.example.first.Services.enums.RequestStatus
 import com.example.first.database.dto.NoteDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -40,7 +41,7 @@ class NoteController {
         newSuspendedTransaction {
             noteService.createNote(newNote)
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null)
+        return ResponseEntity.status(HttpStatus.OK).body(RequestStatus.Success)
     }
 
     @PutMapping("/note/{title}")

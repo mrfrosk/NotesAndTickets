@@ -5,7 +5,7 @@ import com.example.first.Services.JwtService
 import com.example.first.Services.dto.AuthDto
 import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.dto.UpdateTokenDto
-import com.example.first.Services.enums.LoginStatus
+import com.example.first.Services.enums.RequestStatus
 import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -30,7 +30,7 @@ class AuthController {
         val refreshToken = jwtService.generateRefreshToken(userInfo.email)
         val jwt = TokensDto(accessToken, refreshToken)
         val loginStatus = authService.login(userInfo)
-        return if (loginStatus == LoginStatus.Success) {
+        return if (loginStatus == RequestStatus.Success) {
             ResponseEntity.ok().headers(responseHeader).body(jwt)
         } else {
             ResponseEntity.status(403).headers(responseHeader).body(loginStatus.description)
@@ -38,13 +38,14 @@ class AuthController {
     }
 
     @PostMapping("/request-access-token")
-    suspend fun getAccessToken(@RequestBody updateTokenDto: String): String? {
+    suspend fun getAccessToken(@RequestBody updateTokenDto: String): ResponseEntity<*>? {
         val updateDto = Json.decodeFromString<UpdateTokenDto>(updateTokenDto)
         val verifyRefresh = jwtService.verifyRefreshToken(updateDto.token)
         return if (verifyRefresh) {
-            jwtService.generateAccessToken(updateDto.email)
+            val token = jwtService.generateAccessToken(updateDto.email)
+            ResponseEntity.ok().body(token)
         } else{
-            null
+            ResponseEntity.status(403).body(RequestStatus.Denied.description)
         }
 
     }

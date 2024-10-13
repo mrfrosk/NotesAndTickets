@@ -1,7 +1,7 @@
 package com.example.first.Services
 
 import com.example.first.Services.dto.AuthDto
-import com.example.first.Services.enums.LoginStatus
+import com.example.first.Services.enums.RequestStatus
 import com.example.first.Services.utils.Hashing
 import com.example.first.database.entities.User
 import com.example.first.database.tables.UsersTable
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthService {
-    fun login(authDto: AuthDto): LoginStatus {
+    fun login(authDto: AuthDto): RequestStatus {
         val authSuccessful = transaction {
             User.find {
                 (UsersTable.email eq authDto.email) and
@@ -19,9 +19,9 @@ class AuthService {
             }.firstOrNull()
         }
         return if (authSuccessful != null){
-            LoginStatus.Success
+            RequestStatus.Success
         } else{
-            LoginStatus.Denied
+            RequestStatus.Denied
         }
     }
 

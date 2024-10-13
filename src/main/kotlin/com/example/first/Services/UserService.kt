@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService {
 
-    suspend fun createUser(newUserDto: NewUserDto) {
+    suspend fun createUser(newUserDto: NewUserDto): UserDto {
 
         val conditions = userCondition(
             newUserDto.email,
@@ -23,13 +23,13 @@ class UserService {
         )
         val user = User.find { conditions.reduce { acc, op -> acc and op } }.firstOrNull()
         require(user == null) { " Данный пользователь уже существует " }
-        User.new {
+        return User.new {
             email = newUserDto.email
             name = newUserDto.name
             surname = newUserDto.surname
             patronymic = newUserDto.patronymic
             password = Hashing.toSha256(newUserDto.password)
-        }
+        }.toDto()
     }
 
     suspend fun getUsers(): List<UserDto> {
