@@ -2,7 +2,7 @@ package com.example.first
 
 import com.example.first.Services.NoteService
 import com.example.first.Services.UserService
-import com.example.first.database.dto.NoteDto
+import com.example.first.database.dto.NewNoteDto
 import com.example.first.database.dto.NewUserDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
@@ -10,7 +10,6 @@ import com.example.first.database.tables.NotesTable
 import com.example.first.database.tables.UsersTable
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -28,8 +27,69 @@ class NoteServiceTest {
     @Autowired
     lateinit var userService: UserService
 
+    final val userId: UUID = UUID.randomUUID()
+    val noteId: UUID = UUID.randomUUID()
+    val newUserDto = NewUserDto(
+        "testMail1",
+        "testName1",
+        "testSurname1",
+        "testPatronymic1",
+        "sadasdasd"
+    )
+    val newNoteDto = NewNoteDto(
+        "testTitle1",
+        "lorem ipsum expam on this same ",
+        userId
+    )
+
+
+    @BeforeEach
+    fun initData() {
+        transaction {
+            User.new(userId) {
+                this.email = newUserDto.email
+                this.name = newUserDto.name
+                this.surname = newUserDto.surname
+                this.patronymic = newUserDto.patronymic
+                this.password = newUserDto.password
+            }
+            Note.new(noteId) {
+                this.title = newNoteDto.title
+                this.text = newNoteDto.text
+                this.user = User[userId]
+            }
+        }
+    }
 
     @Test
+    fun createNote() {
+       runBlocking {
+           val dto = NewNoteDto("asda", "asdas", userId)
+           val note  = noteService.createNote(dto).toDto()
+           assertEquals(dto, note)
+       }
+    }
+
+
+    @Test
+    fun getNote() {
+
+       runBlocking{
+           val note = noteService.getNote(noteId).toDto()
+           assertEquals(newNoteDto, note)
+       }
+    }
+
+    @Test
+    fun getUserNotes(){
+        runBlocking {
+
+            noteService.getUserNotes(userId)
+
+        }
+    }
+
+    @AfterEach
     fun clearData() {
         transaction {
             NotesTable.deleteAll()

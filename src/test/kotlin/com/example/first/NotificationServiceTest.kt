@@ -1,12 +1,9 @@
 package com.example.first
 
 import com.example.first.Services.NotificationService
-import com.example.first.database.dto.NotificationDto
-import kotlinx.datetime.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.UUID
 
 @SpringBootTest
 class NotificationServiceTest {

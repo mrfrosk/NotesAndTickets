@@ -1,5 +1,6 @@
 package com.example.first.Services
 
+import com.example.first.database.dto.NewNoteDto
 import com.example.first.database.dto.NoteDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
@@ -12,7 +13,7 @@ import java.util.UUID
 @Service
 class NoteService {
 
-    suspend fun createNote(note: NoteDto): Note {
+    suspend fun createNote(note: NewNoteDto): Note {
         return Note.new {
             this.title = note.title
             this.text = note.text

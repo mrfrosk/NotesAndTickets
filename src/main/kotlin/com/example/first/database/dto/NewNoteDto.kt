@@ -3,10 +3,10 @@ package com.example.first.database.dto
 import com.example.first.Services.utils.UUIDSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.UUID
 
 @Serializable
-data class NoteDto(
+data class NewNoteDto(
     @SerialName("title")
     val title: String,
     @SerialName("test")
@@ -14,7 +14,4 @@ data class NoteDto(
     @SerialName("user-id")
     @Serializable(with = UUIDSerializer::class)
     val userId: UUID,
-    @SerialName("id")
-    @Serializable(with = UUIDSerializer::class)
-    val id: UUID
 )
