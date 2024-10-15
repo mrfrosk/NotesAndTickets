@@ -29,8 +29,6 @@ class NoteServiceTest {
     lateinit var userService: UserService
 
 
-
-
     @Test
     fun clearData() {
         transaction {
