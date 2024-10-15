@@ -1,7 +1,7 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.NoteService
-import com.example.first.database.dto.NoteDto
+import com.example.first.database.dto.NewNoteDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -36,7 +36,7 @@ class NoteController {
 
     @PostMapping("/note/new")
     suspend fun createNote(@RequestBody note: String): ResponseEntity<*> {
-        val newNote = Json.decodeFromString<NoteDto>(note)
+        val newNote = Json.decodeFromString<NewNoteDto>(note)
         newSuspendedTransaction {
             noteService.createNote(newNote)
         }

@@ -1,11 +1,10 @@
 package com.example.first.database.entities
 
+import com.example.first.database.dto.NewNoteDto
 import com.example.first.database.dto.NoteDto
 import com.example.first.database.tables.NotesTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID

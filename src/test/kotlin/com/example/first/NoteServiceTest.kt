@@ -2,7 +2,7 @@ package com.example.first
 
 import com.example.first.Services.NoteService
 import com.example.first.Services.UserService
-import com.example.first.database.dto.NoteDto
+import com.example.first.database.dto.NewNoteDto
 import com.example.first.database.dto.NewUserDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
@@ -36,7 +36,7 @@ class NoteServiceTest {
         "testPatronymic1",
         "sadasdasd"
     )
-    val noteDto = NoteDto(
+    val newNoteDto = NewNoteDto(
         "testTitle1",
         "lorem ipsum expam on this same ",
         userId
@@ -54,8 +54,8 @@ class NoteServiceTest {
                 this.password = newUserDto.password
             }
             Note.new(noteId) {
-                this.title = noteDto.title
-                this.text = noteDto.text
+                this.title = newNoteDto.title
+                this.text = newNoteDto.text
                 this.user = User[userId]
             }
         }
@@ -64,7 +64,7 @@ class NoteServiceTest {
     @Test
     fun createNote() {
        runBlocking {
-           val dto = NoteDto("asda", "asdas", userId)
+           val dto = NewNoteDto("asda", "asdas", userId)
            val note  = noteService.createNote(dto).toDto()
            assertEquals(dto, note)
        }
@@ -76,7 +76,7 @@ class NoteServiceTest {
 
        runBlocking{
            val note = noteService.getNote(noteId).toDto()
-           assertEquals(noteDto, note)
+           assertEquals(newNoteDto, note)
        }
     }
 

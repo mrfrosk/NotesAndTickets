@@ -1,10 +1,9 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.NotificationService
-import com.example.first.database.dto.NotificationDto
+import com.example.first.database.dto.NewNotificationDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.not
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -25,8 +24,8 @@ class NotificationController {
 
     @PostMapping("/new")
     suspend fun createNotification(@RequestBody notification: String): ResponseEntity<*> {
-        val notificationDto = Json.decodeFromString<NotificationDto>(notification)
-        notificationService.createNotification(notificationDto)
+        val newNotificationDto = Json.decodeFromString<NewNotificationDto>(notification)
+        notificationService.createNotification(newNotificationDto)
         return ResponseEntity.ok().body(null)
     }
 
