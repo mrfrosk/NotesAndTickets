@@ -21,7 +21,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-    auto-create-db: true
 ---
 spring:
   name: test

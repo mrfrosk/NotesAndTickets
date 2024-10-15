@@ -10,6 +10,7 @@ import com.example.first.database.tables.NotesTable
 import com.example.first.database.tables.UsersTable
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -65,7 +66,9 @@ class NoteServiceTest {
     fun createNote() {
        runBlocking {
            val dto = NoteDto("asda", "asdas", userId)
-           val note  = noteService.createNote(dto).toDto()
+           val note  = newSuspendedTransaction {
+               noteService.createNote(dto).toDto()
+           }
            assertEquals(dto, note)
        }
     }
@@ -73,9 +76,10 @@ class NoteServiceTest {
 
     @Test
     fun getNote() {
-
        runBlocking{
-           val note = noteService.getNote(noteId).toDto()
+           val note = newSuspendedTransaction {
+               noteService.getNote(noteId).toDto()
+           }
            assertEquals(noteDto, note)
        }
     }
@@ -83,9 +87,9 @@ class NoteServiceTest {
     @Test
     fun getUserNotes(){
         runBlocking {
-
-            noteService.getUserNotes(userId)
-
+            newSuspendedTransaction {
+                noteService.getUserNotes(userId)
+            }
         }
     }
 
