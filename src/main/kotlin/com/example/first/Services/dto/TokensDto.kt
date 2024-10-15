@@ -8,4 +8,5 @@ data class TokensDto(
     @SerialName("access-token")
     val accessToken: String,
     @SerialName("refresh-token")
-    val refreshToken: String)
+    val refreshToken: String
+)
