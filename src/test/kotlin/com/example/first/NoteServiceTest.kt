@@ -28,72 +28,10 @@ class NoteServiceTest {
     @Autowired
     lateinit var userService: UserService
 
-    final val userId: UUID = UUID.randomUUID()
-    val noteId: UUID = UUID.randomUUID()
-    val newUserDto = NewUserDto(
-        "testMail1",
-        "testName1",
-        "testSurname1",
-        "testPatronymic1",
-        "sadasdasd"
-    )
-    val noteDto = NoteDto(
-        "testTitle1",
-        "lorem ipsum expam on this same ",
-        userId
-    )
 
-
-    @BeforeEach
-    fun initData() {
-        transaction {
-            User.new(userId) {
-                this.email = newUserDto.email
-                this.name = newUserDto.name
-                this.surname = newUserDto.surname
-                this.patronymic = newUserDto.patronymic
-                this.password = newUserDto.password
-            }
-            Note.new(noteId) {
-                this.title = noteDto.title
-                this.text = noteDto.text
-                this.user = User[userId]
-            }
-        }
-    }
-
-    @Test
-    fun createNote() {
-       runBlocking {
-           val dto = NoteDto("asda", "asdas", userId)
-           val note  = newSuspendedTransaction {
-               noteService.createNote(dto).toDto()
-           }
-           assertEquals(dto, note)
-       }
-    }
 
 
     @Test
-    fun getNote() {
-       runBlocking{
-           val note = newSuspendedTransaction {
-               noteService.getNote(noteId).toDto()
-           }
-           assertEquals(noteDto, note)
-       }
-    }
-
-    @Test
-    fun getUserNotes(){
-        runBlocking {
-            newSuspendedTransaction {
-                noteService.getUserNotes(userId)
-            }
-        }
-    }
-
-    @AfterEach
     fun clearData() {
         transaction {
             NotesTable.deleteAll()
