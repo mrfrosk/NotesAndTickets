@@ -14,4 +14,6 @@ class NotificationScheduler {
         notificationService.sendDailyNotification()
 
     }
+
+
 }
