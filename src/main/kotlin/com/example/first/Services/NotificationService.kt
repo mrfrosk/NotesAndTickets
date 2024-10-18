@@ -40,7 +40,7 @@ class NotificationService {
         }.toList()
     }
 
-    fun getUserNotifications(id: UUID): List<NotificationDto> {
+    fun getNoteNotifications(id: UUID): List<NotificationDto> {
         return Notification.find { NotificationsTable.noteId eq id }.map { it.toDto() }
     }
 

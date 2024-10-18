@@ -90,7 +90,7 @@ class NotificationServiceTest {
     @Test
     fun getNoteNotifications(): Unit = runBlocking {
         newSuspendedTransaction {
-            val notifications = notificationService.getUserNotifications(noteId)
+            val notifications = notificationService.getNoteNotifications(noteId)
             val bdNotifications = Notification.find { NotificationsTable.noteId eq noteId }.map { it.toDto() }
             assertEquals(bdNotifications, notifications)
         }
@@ -110,7 +110,7 @@ class NotificationServiceTest {
     fun deleteNotifications(): Unit = runBlocking {
         newSuspendedTransaction {
             notificationService.deleteNotifications(noteId)
-            assertEquals(0, notificationService.getUserNotifications(noteId).size)
+            assertEquals(0, notificationService.getNoteNotifications(noteId).size)
         }
     }
 

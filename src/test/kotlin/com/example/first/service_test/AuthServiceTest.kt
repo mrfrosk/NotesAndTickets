@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
 @SpringBootTest
 class AuthServiceTest {
@@ -50,8 +49,8 @@ class AuthServiceTest {
         val deniedAuthDto = AuthDto(userEmail, "12")
         val successLogin = authService.login(successAuthDto)
         val deniedLogin = authService.login(deniedAuthDto)
-        assertEquals(RequestStatus.Success, successLogin)
-        assertEquals(RequestStatus.Denied, deniedLogin)
+        assertEquals(RequestStatus.AuthSuccess, successLogin)
+        assertEquals(RequestStatus.AuthFailed, deniedLogin)
     }
 
     @AfterEach

@@ -6,11 +6,11 @@ import com.example.first.Services.dto.AuthDto
 import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.dto.UpdateTokenDto
 import com.example.first.Services.enums.RequestStatus
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.http.HttpHeaders
 
 
 @RestController
@@ -25,15 +25,14 @@ class AuthController {
     @PostMapping("/login")
     suspend fun login(@RequestBody authBody: String): ResponseEntity<*> {
         val userInfo = Json.decodeFromString<AuthDto>(authBody)
-        val responseHeader = HttpHeaders()
         val accessToken = jwtService.generateAccessToken(userInfo.email)
         val refreshToken = jwtService.generateRefreshToken(userInfo.email)
         val jwt = TokensDto(accessToken, refreshToken)
         val loginStatus = authService.login(userInfo)
-        return if (loginStatus == RequestStatus.Success) {
-            ResponseEntity.ok().headers(responseHeader).body(jwt)
+        return if (loginStatus == RequestStatus.AuthSuccess) {
+            ResponseEntity.ok().body(Json.encodeToString(jwt))
         } else {
-            ResponseEntity.status(403).headers(responseHeader).body(loginStatus.description)
+            ResponseEntity.status(403).body(loginStatus.description)
         }
     }
 
@@ -43,9 +42,9 @@ class AuthController {
         val verifyRefresh = jwtService.verifyRefreshToken(updateDto.token)
         return if (verifyRefresh) {
             val token = jwtService.generateAccessToken(updateDto.email)
-            ResponseEntity.ok().body(token)
+            ResponseEntity.ok().body(Json.encodeToString(token))
         } else{
-            ResponseEntity.status(403).body(RequestStatus.Denied.description)
+            ResponseEntity.status(403).body(RequestStatus.AuthFailed.description)
         }
 
     }

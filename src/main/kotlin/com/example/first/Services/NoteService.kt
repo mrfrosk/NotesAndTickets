@@ -5,15 +5,18 @@ import com.example.first.database.dto.NoteDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
+import org.postgresql.util.PSQLException
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class NoteService {
 
-    suspend fun createNote(note: NewNoteDto): Note {
+    suspend fun createNote(note: NewNoteDto): Note? {
+
         return Note.new {
             this.title = note.title
             this.text = note.text
@@ -25,12 +28,11 @@ class NoteService {
         return Note[id]
     }
 
-    suspend fun getNote(title: String): Note {
+    suspend fun getNote(title: String): Note? {
         val note = Note.find {
-                NotesTable.title eq title
-            }.firstOrNull()
+            NotesTable.title eq title
+        }.firstOrNull()
 
-        require(note != null) { "Заметки с названием $title не существует" }
         return note
     }
 
@@ -38,10 +40,14 @@ class NoteService {
         return Note.find { NotesTable.user eq userId }.map { it.toDto() }.toList()
     }
 
-    suspend fun updateNote(title: String, text: String): Note {
+    suspend fun updateNote(title: String, text: String): Note? {
         val note = getNote(title)
-        note.text = text
-        return note
+        return if (note != null) {
+            note.text = text
+            note
+        } else {
+            null
+        }
     }
 
     suspend fun deleteNote(title: String) {
