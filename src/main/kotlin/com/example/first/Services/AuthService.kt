@@ -19,9 +19,9 @@ class AuthService {
             }.firstOrNull()
         }
         return if (authSuccessful != null){
-            RequestStatus.Success
+            RequestStatus.AuthSuccess
         } else{
-            RequestStatus.Denied
+            RequestStatus.AuthFailed
         }
     }
 

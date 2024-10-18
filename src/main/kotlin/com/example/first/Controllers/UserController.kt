@@ -2,6 +2,7 @@ package com.example.first.Controllers
 
 import com.example.first.Services.UserService
 import com.example.first.database.dto.NewUserDto
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,10 +23,10 @@ class UserController {
     @PostMapping("/new")
     suspend fun createUser(@RequestBody user: String): ResponseEntity<*> {
         val newUserDto = Json.decodeFromString<NewUserDto>(user)
-        newSuspendedTransaction {
+        val newUser = newSuspendedTransaction {
             userService.createUser(newUserDto)
         }
-        return ResponseEntity.ok().body(null)
+        return ResponseEntity.ok().body(Json.encodeToString(newUser))
     }
 
     @GetMapping("/user/{email}")

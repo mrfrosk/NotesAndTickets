@@ -56,7 +56,7 @@ class NoteServiceTest {
     @Test
     fun createNote(): Unit = runBlocking {
         newSuspendedTransaction {
-            val note = noteService.createNote(newNote).toDto()
+            val note = noteService.createNote(newNote)?.toDto()
             val dbNote = Note.find {
                 NotesTable.title eq newNote.title
             }.firstOrNull()?.toDto()
@@ -77,7 +77,7 @@ class NoteServiceTest {
     @Test
     fun getByTitle(): Unit = runBlocking {
         newSuspendedTransaction {
-            val note = noteService.getNote(noteTitle).toDto()
+            val note = noteService.getNote(noteTitle)?.toDto()
             val dbNote = Note.find { NotesTable.title eq noteTitle }.first().toDto()
             assertEquals(dbNote, note)
         }
@@ -95,8 +95,8 @@ class NoteServiceTest {
     fun updateNote(): Unit = runBlocking {
         newSuspendedTransaction {
             val newText = "newText"
-            val updatedNote = noteService.updateNote(noteTitle, newText).toDto()
-            val note = noteService.getNote(noteTitle).toDto()
+            val updatedNote = noteService.updateNote(noteTitle, newText)?.toDto()
+            val note = noteService.getNote(noteTitle)?.toDto()
             assertEquals(note, updatedNote)
         }
     }
