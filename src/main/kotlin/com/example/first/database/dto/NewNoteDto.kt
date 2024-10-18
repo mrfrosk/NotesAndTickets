@@ -9,7 +9,7 @@ import java.util.UUID
 data class NewNoteDto(
     @SerialName("title")
     val title: String,
-    @SerialName("test")
+    @SerialName("text")
     val text: String,
     @SerialName("user-id")
     @Serializable(with = UUIDSerializer::class)

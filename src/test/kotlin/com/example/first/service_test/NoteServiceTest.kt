@@ -28,6 +28,7 @@ class NoteServiceTest {
     final val noteId = UUID.randomUUID()
     val newNote = NewNoteDto("title", "text", userId)
     val noteTitle = "dbTitle"
+    val newTitle = "dbTitle2"
 
     @BeforeEach
     fun initData(): Unit = runBlocking {
@@ -99,6 +100,15 @@ class NoteServiceTest {
             val note = noteService.getNote(noteTitle)?.toDto()
             assertEquals(note, updatedNote)
         }
+    }
+    @Test
+    fun updateNoteV2(): Unit = runBlocking {
+        newSuspendedTransaction {
+            val updatedNote = noteService.updateNoteV2(noteTitle, newTitle, "new text")
+            val dbNote = Note[noteId].toDto()
+            assertEquals(dbNote, updatedNote)
+        }
+
     }
 
     @Test

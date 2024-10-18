@@ -7,6 +7,7 @@ import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.utils.Hashing
 import com.example.first.database.dto.NewNoteDto
 import com.example.first.database.dto.NoteDto
+import com.example.first.database.dto.UpdateNoteDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
@@ -43,6 +44,7 @@ class NoteControllerTest {
     val userId = UUID.randomUUID()
     val noteId = UUID.randomUUID()
     val newNote = NewNoteDto("test", "test", userId)
+    val updateDto = UpdateNoteDto("test1", "text1")
 
     @BeforeEach
     fun init() {
@@ -86,12 +88,20 @@ class NoteControllerTest {
     @Test
     fun getNote(): Unit = runBlocking {
         val accessToken = getAccessToken()
-        val request = client.get("$serverAddress${Mapping.NOTES}/note/title") {
+        val requestById = client.get("$serverAddress${Mapping.NOTES}/note"){
+            parameter("id", noteId)
             headers.append("Authorization", "Bearer $accessToken")
         }
-        val note = Json.decodeFromString<NoteDto>(request.bodyAsText())
+        val requestByTitle = client.get("$serverAddress${Mapping.NOTES}/note") {
+            parameter("title", "title")
+            headers.append("Authorization", "Bearer $accessToken")
+        }
+
+        val noteByTitle = Json.decodeFromString<NoteDto>(requestByTitle.bodyAsText())
+        val noteById = Json.decodeFromString<NoteDto>(requestById.bodyAsText())
         val dbNote = newSuspendedTransaction { Note.find { NotesTable.title eq "title" }.first().toDto() }
-        assertEquals(dbNote, note)
+        assertEquals(dbNote, noteByTitle)
+        assertEquals(dbNote, noteById)
     }
 
     @OptIn(InternalAPI::class)
@@ -105,6 +115,25 @@ class NoteControllerTest {
         val note = Json.decodeFromString<NoteDto>(request.bodyAsText())
         assertEquals(HttpStatusCode.OK, request.status)
         assertEquals("newText", note.text)
+    }
+
+    @OptIn(InternalAPI::class)
+    @Test
+    fun updateNoteV2(): Unit = runBlocking {
+        val accessToken = getAccessToken()
+        val request = client.put("http://localhost:8080/api/notes/noteV2/title") {
+            body = Json.encodeToString(updateDto)
+            headers.append("Authorization", "Bearer $accessToken")
+        }
+        println("v2 status: ${request.status}")
+        println("$serverAddress${Mapping.NOTES}/noteV2/title")
+        println(request.headers)
+        val note = Json.decodeFromString<NoteDto>(request.bodyAsText())
+        val dbNote = newSuspendedTransaction {
+            Note[noteId].toDto()
+        }
+        assertEquals(HttpStatusCode.OK, request.status)
+        assertEquals(dbNote, note)
     }
 
     @OptIn(InternalAPI::class)

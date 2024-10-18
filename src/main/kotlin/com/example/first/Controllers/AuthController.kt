@@ -29,8 +29,8 @@ class AuthController {
         val refreshToken = jwtService.generateRefreshToken(userInfo.email)
         val jwt = TokensDto(accessToken, refreshToken)
         val loginStatus = authService.login(userInfo)
-        return if (loginStatus == RequestStatus.Success) {
-            ResponseEntity.ok().headers(responseHeader).body(Json.encodeToString(jwt))
+        return if (loginStatus == RequestStatus.AuthSuccess) {
+            ResponseEntity.ok().body(Json.encodeToString(jwt))
         } else {
             ResponseEntity.status(403).body(loginStatus.description)
         }
@@ -46,6 +46,5 @@ class AuthController {
         } else{
             ResponseEntity.status(403).body(RequestStatus.AuthFailed.description)
         }
-
     }
 }

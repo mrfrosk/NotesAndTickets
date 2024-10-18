@@ -50,6 +50,14 @@ class NoteService {
         }
     }
 
+    suspend fun updateNoteV2(oldTitle: String, title: String, text: String): NoteDto {
+        val note = Note.find { NotesTable.title eq oldTitle }.first()
+        note.title = title
+        note.text = text
+        return note.toDto()
+
+    }
+
     suspend fun deleteNote(title: String) {
         NotesTable.deleteWhere { NotesTable.title eq title }
     }
