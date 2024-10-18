@@ -6,6 +6,7 @@ import com.example.first.Services.dto.AuthDto
 import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.dto.UpdateTokenDto
 import com.example.first.Services.enums.RequestStatus
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -31,7 +32,7 @@ class AuthController {
         val jwt = TokensDto(accessToken, refreshToken)
         val loginStatus = authService.login(userInfo)
         return if (loginStatus == RequestStatus.Success) {
-            ResponseEntity.ok().headers(responseHeader).body(jwt)
+            ResponseEntity.ok().headers(responseHeader).body(Json.encodeToString(jwt))
         } else {
             ResponseEntity.status(403).headers(responseHeader).body(loginStatus.description)
         }
