@@ -20,14 +20,14 @@ import kotlin.time.toKotlinDuration
 class NotificationService {
     @Autowired
     lateinit var sender: MailSender
-    fun createNotification(notification: NewNotificationDto) {
-        transaction {
+    fun createNotification(notification: NewNotificationDto): NotificationDto {
+        return transaction {
             Notification.new {
                 this.text = notification.text
                 this.date = notification.date
                 this.repeat = notification.repeat
                 this.note = Note[notification.noteId]
-            }
+            }.toDto()
         }
     }
 

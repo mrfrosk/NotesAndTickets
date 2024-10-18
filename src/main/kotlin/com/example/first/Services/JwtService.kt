@@ -63,17 +63,20 @@ class JwtService {
         return try {
             parser.parseSignedClaims(token)
             true
-        } catch (e: Exception){
+        } catch (e: Exception) {
             false
         }
 
     }
 
     private fun getAllClaims(token: String): Claims {
-        val parser = Jwts.parser()
-            .verifyWith(properties.getAccessKey())
-            .build()
-
-        return parser.parseSignedClaims(token).payload
+        val parser = if (verifyAccessToken(token)) {
+            Jwts.parser()
+                .verifyWith(properties.getAccessKey())
+        } else {
+            Jwts.parser()
+                .verifyWith(properties.getRefreshKey())
+        }
+        return parser.build().parseSignedClaims(token).payload
     }
 }
