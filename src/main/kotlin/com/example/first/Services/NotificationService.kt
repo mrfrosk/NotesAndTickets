@@ -30,7 +30,7 @@ class NotificationService {
         }
     }
 
-    fun updateNotification(text: String, updateData: UpdateNotificationDto): NotificationDto{
+    fun updateNotification(text: String, updateData: UpdateNotificationDto): NotificationDto {
         val notification = Notification.find { NotificationsTable.text eq text }.first()
         notification.text = updateData.text
         notification.date = updateData.date

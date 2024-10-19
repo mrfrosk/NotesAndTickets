@@ -2,6 +2,7 @@ package com.example.first.service_test
 
 import com.example.first.Services.NotificationService
 import com.example.first.Services.dto.NewNotificationDto
+import com.example.first.Services.dto.UpdateNotificationDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.Notification
 import com.example.first.database.entities.User
@@ -35,9 +36,9 @@ class NotificationServiceTest {
     val userId = UUID.randomUUID()
     final val noteId = UUID.randomUUID()
     val notificationId = UUID.randomUUID()
-    val notificationDto = NewNotificationDto("text", currentDay, false, noteId)
     val nextDate = (Instant.now() + Duration.ofDays(2)).toKotlinInstant().toLocalDateTime(TimeZone.UTC)
-
+    val updateData = UpdateNotificationDto("text1", nextDate, true)
+    val notificationDto = NewNotificationDto("text", currentDay, false, noteId)
     @BeforeEach
     fun initData(): Unit = transaction {
         User.new(userId) {
@@ -75,6 +76,15 @@ class NotificationServiceTest {
             val notification = notificationService.createNotification(notificationDto)
             val dbNotification = Notification.find { NotificationsTable.text eq notificationDto.text }.first().toDto()
             assertEquals(dbNotification, notification)
+        }
+    }
+
+    @Test
+    fun updateNotification(): Unit = runBlocking{
+        newSuspendedTransaction {
+            val updateNote = notificationService.updateNotification("text1", updateData)
+            val dbNote = Notification[notificationId].toDto()
+            assertEquals(dbNote, updateNote)
         }
     }
 
