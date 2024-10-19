@@ -1,6 +1,8 @@
 package com.example.first.Services
 
 import com.example.first.Services.dto.NewNotificationDto
+import com.example.first.Services.dto.UpdateNoteDto
+import com.example.first.Services.dto.UpdateNotificationDto
 import com.example.first.database.dto.NotificationDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.Notification
@@ -26,6 +28,14 @@ class NotificationService {
                 this.note = Note[notification.noteId]
             }.toDto()
         }
+    }
+
+    fun updateNotification(text: String, updateData: UpdateNotificationDto): NotificationDto{
+        val notification = Notification.find { NotificationsTable.text eq text }.first()
+        notification.text = updateData.text
+        notification.date = updateData.date
+        notification.repeat = updateData.repeat
+        return notification.toDto()
     }
 
     fun getDailyNotifications(): List<Pair<String, String>> {
