@@ -27,7 +27,7 @@ class NotificationController {
     @PostMapping("/new")
     suspend fun createNotification(@RequestBody notification: String): ResponseEntity<*> {
         val newNotificationDto = Json.decodeFromString<NewNotificationDto>(notification)
-        val newNotification = notificationService.createNotification(newNotificationDto)
+        val newNotification = newSuspendedTransaction { notificationService.createNotification(newNotificationDto) }
         return ResponseEntity.ok().body(Json.encodeToString(newNotification))
     }
 

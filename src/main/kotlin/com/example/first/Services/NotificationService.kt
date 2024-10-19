@@ -19,18 +19,16 @@ import kotlin.time.toKotlinDuration
 @Service
 class NotificationService {
 
-    fun createNotification(notification: NewNotificationDto): NotificationDto {
-        return transaction {
-            Notification.new {
-                this.text = notification.text
-                this.date = notification.date
-                this.repeat = notification.repeat
-                this.note = Note[notification.noteId]
-            }.toDto()
-        }
+    suspend fun createNotification(notification: NewNotificationDto): NotificationDto {
+        return Notification.new {
+            this.text = notification.text
+            this.date = notification.date
+            this.repeat = notification.repeat
+            this.note = Note[notification.noteId]
+        }.toDto()
     }
 
-    fun updateNotification(text: String, updateData: UpdateNotificationDto): NotificationDto {
+    suspend fun updateNotification(text: String, updateData: UpdateNotificationDto): NotificationDto {
         val notification = Notification.find { NotificationsTable.text eq text }.first()
         notification.text = updateData.text
         notification.date = updateData.date
@@ -49,7 +47,7 @@ class NotificationService {
         }
     }
 
-    fun getNoteNotifications(id: UUID): List<NotificationDto> {
+    suspend fun getNoteNotifications(id: UUID): List<NotificationDto> {
         return Notification.find { NotificationsTable.noteId eq id }.map { it.toDto() }
     }
 
@@ -58,7 +56,6 @@ class NotificationService {
         val midnightTime = LocalDateTime(currentDateTime.date, LocalTime(0, 0))
         return midnightTime
     }
-
 
 
     suspend fun deleteNotifications(noteId: UUID) {
