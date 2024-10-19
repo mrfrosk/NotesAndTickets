@@ -18,8 +18,7 @@ import kotlin.time.toKotlinDuration
 
 @Service
 class NotificationService {
-    @Autowired
-    lateinit var sender: MailSender
+
     fun createNotification(notification: NewNotificationDto): NotificationDto {
         return transaction {
             Notification.new {
@@ -31,13 +30,15 @@ class NotificationService {
         }
     }
 
-    fun getDailyNotifications(): List<Notification> {
+    fun getDailyNotifications(): List<Pair<String, String>> {
         val startTime = getMidnightTime()
         val endTime = startTime.toInstant(TimeZone.UTC) + Duration.ofDays(2).toKotlinDuration()
-        return Notification.find {
-            (NotificationsTable.date greaterEq startTime) and
-                    (NotificationsTable.date less endTime.toLocalDateTime(TimeZone.UTC))
-        }.toList()
+        return transaction {
+            Notification.find {
+                (NotificationsTable.date greaterEq startTime) and
+                        (NotificationsTable.date less endTime.toLocalDateTime(TimeZone.UTC))
+            }.toList().map { it.text to it.note.user.email }
+        }
     }
 
     fun getNoteNotifications(id: UUID): List<NotificationDto> {
@@ -50,13 +51,7 @@ class NotificationService {
         return midnightTime
     }
 
-    fun sendDailyNotification() {
-        val notifications = getDailyNotifications()
-        val sandedNotify = notifications.map { it.text to it.note.user.email }
-        sandedNotify.forEach {
-            sender.send(it.second, it.first, "уведомление")
-        }
-    }
+
 
     suspend fun deleteNotifications(noteId: UUID) {
         val notifications = Notification.find { NotificationsTable.noteId eq noteId }
