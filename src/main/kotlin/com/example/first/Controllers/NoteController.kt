@@ -54,15 +54,7 @@ class NoteController {
     }
 
     @PutMapping("/note/{title}")
-    suspend fun updateNote(@PathVariable("title") title: String, @RequestBody text: String): ResponseEntity<*> {
-        val note = newSuspendedTransaction {
-            noteService.updateNote(title, text)?.toDto()
-        }
-        return ResponseEntity.ok(Json.encodeToString(note))
-    }
-
-    @PutMapping("/noteV2/{title}")
-    suspend fun updateNoteV2(
+    suspend fun updateNote(
         @PathVariable("title") title: String,
         @RequestBody updateData: String
     ): ResponseEntity<*> {

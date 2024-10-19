@@ -92,17 +92,9 @@ class NoteServiceTest {
             assertEquals(dbNotes, notes)
         }
     }
+
     @Test
     fun updateNote(): Unit = runBlocking {
-        newSuspendedTransaction {
-            val newText = "newText"
-            val updatedNote = noteService.updateNote(noteTitle, newText)?.toDto()
-            val note = noteService.getNote(noteTitle)?.toDto()
-            assertEquals(note, updatedNote)
-        }
-    }
-    @Test
-    fun updateNoteV2(): Unit = runBlocking {
         newSuspendedTransaction {
             val updatedNote = noteService.updateNoteV2(noteTitle, newTitle, "new text")
             val dbNote = Note[noteId].toDto()

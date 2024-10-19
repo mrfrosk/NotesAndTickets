@@ -108,19 +108,6 @@ class NoteControllerTest {
     @Test
     fun updateNote(): Unit = runBlocking {
         val accessToken = getAccessToken()
-        val request = client.put("$serverAddress${Mapping.NOTES}/note/title") {
-            body = "newText"
-            headers.append("Authorization", "Bearer $accessToken")
-        }
-        val note = Json.decodeFromString<NoteDto>(request.bodyAsText())
-        assertEquals(HttpStatusCode.OK, request.status)
-        assertEquals("newText", note.text)
-    }
-
-    @OptIn(InternalAPI::class)
-    @Test
-    fun updateNoteV2(): Unit = runBlocking {
-        val accessToken = getAccessToken()
         val request = client.put("http://localhost:8080/api/notes/noteV2/title") {
             body = Json.encodeToString(updateDto)
             headers.append("Authorization", "Bearer $accessToken")
