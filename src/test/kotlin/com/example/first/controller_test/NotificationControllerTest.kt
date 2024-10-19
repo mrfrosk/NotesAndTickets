@@ -18,12 +18,14 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.not
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.AfterEach
@@ -32,7 +34,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.toKotlinDuration
@@ -92,8 +94,9 @@ class NotificationControllerTest {
         val dbNotification = newSuspendedTransaction {
             Notification.find { NotificationsTable.text eq newNotification.text }.first().toDto()
         }
+
         assertEquals(HttpStatusCode.OK, request.status)
-        assertNotifications(dbNotification, notification)
+        assertEquals(dbNotification, notification)
     }
 
     @Test
