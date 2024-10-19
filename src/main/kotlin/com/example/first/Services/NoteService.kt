@@ -1,14 +1,12 @@
 package com.example.first.Services
 
-import com.example.first.database.dto.NewNoteDto
+import com.example.first.Services.dto.NewNoteDto
 import com.example.first.database.dto.NoteDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
-import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
-import org.postgresql.util.PSQLException
 import org.springframework.stereotype.Service
 import java.util.UUID
 

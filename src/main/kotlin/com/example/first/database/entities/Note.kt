@@ -1,6 +1,5 @@
 package com.example.first.database.entities
 
-import com.example.first.database.dto.NewNoteDto
 import com.example.first.database.dto.NoteDto
 import com.example.first.database.tables.NotesTable
 import org.jetbrains.exposed.dao.Entity

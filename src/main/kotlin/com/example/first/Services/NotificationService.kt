@@ -1,7 +1,6 @@
 package com.example.first.Services
 
-import com.example.first.Services.utils.MailSender
-import com.example.first.database.dto.NewNotificationDto
+import com.example.first.Services.dto.NewNotificationDto
 import com.example.first.database.dto.NotificationDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.Notification
@@ -12,7 +11,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 import java.time.Duration
 import kotlinx.datetime.LocalDateTime
-import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID
 import kotlin.time.toKotlinDuration
 

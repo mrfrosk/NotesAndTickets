@@ -4,7 +4,7 @@ import com.example.first.Controllers.Mapping
 import com.example.first.Services.dto.AuthDto
 import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.utils.Hashing
-import com.example.first.database.dto.NewNotificationDto
+import com.example.first.Services.dto.NewNotificationDto
 import com.example.first.database.dto.NotificationDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.Notification

@@ -1,7 +1,7 @@
 package com.example.first.service_test
 
 import com.example.first.Services.UserService
-import com.example.first.database.dto.NewUserDto
+import com.example.first.Services.dto.NewUserDto
 import com.example.first.database.entities.User
 import com.example.first.database.tables.UsersTable
 import kotlinx.coroutines.runBlocking

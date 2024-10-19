@@ -1,7 +1,7 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.NotificationService
-import com.example.first.database.dto.NewNotificationDto
+import com.example.first.Services.dto.NewNotificationDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction

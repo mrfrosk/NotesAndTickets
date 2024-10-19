@@ -1,8 +1,8 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.NoteService
-import com.example.first.database.dto.NewNoteDto
-import com.example.first.database.dto.UpdateNoteDto
+import com.example.first.Services.dto.NewNoteDto
+import com.example.first.Services.dto.UpdateNoteDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction

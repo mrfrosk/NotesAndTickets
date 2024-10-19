@@ -1,7 +1,7 @@
 package com.example.first.service_test
 
 import com.example.first.Services.NotificationService
-import com.example.first.database.dto.NewNotificationDto
+import com.example.first.Services.dto.NewNotificationDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.Notification
 import com.example.first.database.entities.User

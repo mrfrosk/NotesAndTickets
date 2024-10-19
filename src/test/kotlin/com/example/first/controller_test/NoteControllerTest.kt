@@ -5,9 +5,9 @@ import com.example.first.FirstApplication
 import com.example.first.Services.dto.AuthDto
 import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.utils.Hashing
-import com.example.first.database.dto.NewNoteDto
+import com.example.first.Services.dto.NewNoteDto
 import com.example.first.database.dto.NoteDto
-import com.example.first.database.dto.UpdateNoteDto
+import com.example.first.Services.dto.UpdateNoteDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable

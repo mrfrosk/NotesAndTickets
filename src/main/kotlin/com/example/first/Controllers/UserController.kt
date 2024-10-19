@@ -1,7 +1,7 @@
 package com.example.first.Controllers
 
 import com.example.first.Services.UserService
-import com.example.first.database.dto.NewUserDto
+import com.example.first.Services.dto.NewUserDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction

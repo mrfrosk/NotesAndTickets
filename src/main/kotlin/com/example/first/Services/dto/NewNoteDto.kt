@@ -1,20 +1,17 @@
-package com.example.first.database.dto
+package com.example.first.Services.dto
 
 import com.example.first.Services.utils.UUIDSerializer
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
-data class NewNotificationDto(
+data class NewNoteDto(
+    @SerialName("title")
+    val title: String,
     @SerialName("text")
     val text: String,
-    @SerialName("date")
-    val date: LocalDateTime,
-    @SerialName("repeat")
-    val repeat: Boolean,
-    @SerialName("note-id")
+    @SerialName("user-id")
     @Serializable(with = UUIDSerializer::class)
-    val noteId: UUID
+    val userId: UUID,
 )

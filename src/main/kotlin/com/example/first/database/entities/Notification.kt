@@ -2,10 +2,8 @@ package com.example.first.database.entities
 
 import com.example.first.database.dto.NotificationDto
 import com.example.first.database.tables.NotificationsTable
-import kotlinx.datetime.Instant
+import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID

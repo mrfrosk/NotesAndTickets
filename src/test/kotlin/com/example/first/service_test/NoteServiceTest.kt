@@ -1,7 +1,7 @@
 package com.example.first.service_test
 
 import com.example.first.Services.NoteService
-import com.example.first.database.dto.NewNoteDto
+import com.example.first.Services.dto.NewNoteDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.User
 import com.example.first.database.tables.NotesTable
@@ -12,7 +12,6 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.util.UUID
