@@ -107,9 +107,8 @@ class NoteServiceTest {
     fun deleteNote(): Unit = runBlocking {
         newSuspendedTransaction {
             noteService.deleteNote(noteTitle)
-            assertThrows<IllegalArgumentException> {
-                noteService.getNote(noteTitle)
-            }
+
+            assertEquals(null, noteService.getNote(noteTitle))
         }
     }
 

@@ -108,13 +108,11 @@ class NoteControllerTest {
     @Test
     fun updateNote(): Unit = runBlocking {
         val accessToken = getAccessToken()
-        val request = client.put("http://localhost:8080/api/notes/noteV2/title") {
+        val request = client.put("http://localhost:8080/api/notes/note/title") {
             body = Json.encodeToString(updateDto)
             headers.append("Authorization", "Bearer $accessToken")
         }
-        println("v2 status: ${request.status}")
-        println("$serverAddress${Mapping.NOTES}/noteV2/title")
-        println(request.headers)
+
         val note = Json.decodeFromString<NoteDto>(request.bodyAsText())
         val dbNote = newSuspendedTransaction {
             Note[noteId].toDto()
