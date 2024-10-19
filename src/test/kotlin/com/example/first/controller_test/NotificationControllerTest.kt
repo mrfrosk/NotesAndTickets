@@ -5,6 +5,7 @@ import com.example.first.Services.dto.AuthDto
 import com.example.first.Services.dto.TokensDto
 import com.example.first.Services.utils.Hashing
 import com.example.first.Services.dto.NewNotificationDto
+import com.example.first.Services.dto.UpdateNotificationDto
 import com.example.first.database.dto.NotificationDto
 import com.example.first.database.entities.Note
 import com.example.first.database.entities.Notification
@@ -49,7 +50,7 @@ class NotificationControllerTest {
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.UTC)
     val nextDate = (Clock.System.now() + Duration.ofDays(2).toKotlinDuration()).toLocalDateTime(TimeZone.UTC)
     val newNotification = NewNotificationDto("test", currentDate, false, noteId)
-
+    val updateData = UpdateNotificationDto("UpdatedText", nextDate, true)
     @BeforeEach
     fun init(): Unit = transaction {
         User.new(userId) {
@@ -95,6 +96,22 @@ class NotificationControllerTest {
             Notification.find { NotificationsTable.text eq newNotification.text }.first().toDto()
         }
 
+        assertEquals(HttpStatusCode.OK, request.status)
+        assertEquals(dbNotification, notification)
+    }
+
+    @OptIn(InternalAPI::class)
+    @Test
+    fun updateNotification(): Unit = runBlocking {
+        val accessToken = getAccessToken()
+
+
+        val request = client.put("$serverAddress${Mapping.NOTIFICATIONS}/notification/text1") {
+            body = Json.encodeToString(updateData)
+            headers.append("Authorization", "Bearer $accessToken")
+        }
+        val notification = Json.decodeFromString<NotificationDto>(request.bodyAsText())
+        val dbNotification = newSuspendedTransaction { Notification[notificationId].toDto() }
         assertEquals(HttpStatusCode.OK, request.status)
         assertEquals(dbNotification, notification)
     }

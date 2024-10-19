@@ -2,6 +2,7 @@ package com.example.first.Controllers
 
 import com.example.first.Services.NotificationService
 import com.example.first.Services.dto.NewNotificationDto
+import com.example.first.Services.dto.UpdateNotificationDto
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -35,6 +37,17 @@ class NotificationController {
             notificationService.getNoteNotifications(id)
         }
         return ResponseEntity.ok().body(Json.encodeToString(notifications))
+    }
+
+    @PutMapping("/notification/{text}")
+    suspend fun updateNotification(
+        @PathVariable("text") text: String,
+        @RequestBody updateData: String
+    ): ResponseEntity<*> {
+        val updateDto = Json.decodeFromString<UpdateNotificationDto>(updateData)
+        println(updateDto)
+        val notification = newSuspendedTransaction { notificationService.updateNotification(text, updateDto) }
+        return ResponseEntity.ok(Json.encodeToString(notification))
     }
 
     @DeleteMapping("/{noteId}")
